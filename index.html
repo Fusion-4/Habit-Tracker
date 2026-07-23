@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Habit Tracker</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+
+    --background:#f5f7fb;
+    --surface:#ffffff;
+    --surface2:#f0f3f8;
+
+    --primary:#4f46e5;
+    --primaryHover:#4338ca;
+
+    --text:#1f2937;
+    --textLight:#6b7280;
+
+    --border:#d8dee9;
+
+    --danger:#ef4444;
+
+    --shadow:
+        0 10px 25px rgba(0,0,0,.08);
+
+    --radius:18px;
+
+}
+
+body.dark{
+
+    --background:#10131a;
+    --surface:#1b202b;
+    --surface2:#252c39;
+
+    --text:#eef2ff;
+    --textLight:#aeb8c8;
+
+    --border:#31384a;
+
+    --shadow:
+        0 10px 30px rgba(0,0,0,.45);
+
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+body{
+
+    background:var(--background);
+
+    color:var(--text);
+
+    font-family:Inter,sans-serif;
+
+    min-height:100vh;
+
+    transition:
+        background .35s,
+        color .35s;
+
+}
+
+.container{
+
+    width:min(1100px,92%);
+
+    margin:auto;
+
+}
+
+header{
+
+    padding:35px 0;
+
+}
+
+.topBar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+
+}
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+.logoCircle{
+
+    width:58px;
+
+    height:58px;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:white;
+
+    font-size:28px;
+
+    font-weight:bold;
+
+    box-shadow:var(--shadow);
+
+}
+
+.logoText h1{
+
+    font-size:30px;
+
+    font-weight:700;
+
+}
+
+.logoText p{
+
+    color:var(--textLight);
+
+    margin-top:4px;
+
+}
+
+.themeButton{
+
+    width:55px;
+
+    height:55px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:var(--surface);
+
+    cursor:pointer;
+
+    box-shadow:var(--shadow);
+
+    font-size:22px;
+
+    transition:.25s;
+
+}
+
+.themeButton:hover{
+
+    transform:rotate(20deg) scale(1.05);
+
+}
+
+.hero{
+
+    margin-top:20px;
+
+    background:var(--surface);
+
+    border-radius:var(--radius);
+
+    padding:35px;
+
+    box-shadow:var(--shadow);
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    justify-content:space-between;
+
+    gap:30px;
+
+    align-items:center;
+
+}
+
+.heroLeft h2{
+
+    font-size:34px;
+
+    margin-bottom:12px;
+
+}
+
+.heroLeft p{
+
+    color:var(--textLight);
+
+    max-width:520px;
+
+    line-height:1.6;
+
+}
+
+.summary{
+
+    display:flex;
+
+    gap:18px;
+
+    flex-wrap:wrap;
+
+}
+
+.card{
+
+    background:var(--surface2);
+
+    padding:20px;
+
+    border-radius:16px;
+
+    min-width:150px;
+
+    text-align:center;
+
+}
+
+.card h3{
+
+    font-size:32px;
+
+}
+
+.card span{
+
+    color:var(--textLight);
+
+    font-size:14px;
+
+}
+
+main{
+
+    margin-top:35px;
+
+}
+
+.addHabit{
+
+    background:var(--surface);
+
+    border-radius:var(--radius);
+
+    padding:28px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.addHabit h2{
+
+    margin-bottom:20px;
+
+}
+
+.inputRow{
+
+    display:flex;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+}
+
+.inputRow input{
+
+    flex:1;
+
+    min-width:220px;
+
+    padding:16px 18px;
+
+    border-radius:14px;
+
+    border:2px solid var(--border);
+
+    font-size:16px;
+
+    background:transparent;
+
+    color:var(--text);
+
+    transition:.25s;
+
+}
+
+.inputRow input:focus{
+
+    outline:none;
+
+    border-color:var(--primary);
+
+}
+
+.addButton{
+
+    padding:16px 28px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:var(--primary);
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.addButton:hover{
+
+    background:var(--primaryHover);
+
+    transform:translateY(-2px);
+
+}
+
+.sectionTitle{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin:35px 0 18px;
+
+}
+
+.sectionTitle h2{
+
+    font-size:28px;
+
+}
+
+.habitCount{
+
+    color:var(--textLight);
+
+    font-weight:600;
+
+}
+
+.habitList{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+
+    gap:22px;
+
+    margin-bottom:35px;
+
+}
+
+.habit{
+
+    background:var(--surface);
+
+    border-radius:18px;
+
+    padding:22px;
+
+    box-shadow:var(--shadow);
+
+    border:2px solid transparent;
+
+    transition:
+        transform .25s,
+        border-color .25s,
+        background .25s;
+
+}
+
+.habit:hover{
+
+    transform:translateY(-5px);
+
+    border-color:var(--primary);
+
+}
+
+.habitHeader{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:18px;
+
+}
+
+.habitName{
+
+    font-size:20px;
+
+    font-weight:600;
+
+    word-break:break-word;
+
+}
+
+.deleteButton{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:rgba(239,68,68,.12);
+
+    color:var(--danger);
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    transition:.2s;
+
+}
+
+.deleteButton:hover{
+
+    background:var(--danger);
+
+    color:white;
+
+    transform:scale(1.08);
+
+}
+
+.habitInfo{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    color:var(--textLight);
+
+    font-size:14px;
+
+}
+
+.badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    background:var(--surface2);
+
+    font-weight:600;
+
+}
+
+.empty{
+
+    background:var(--surface);
+
+    border-radius:18px;
+
+    box-shadow:var(--shadow);
+
+    padding:60px 25px;
+
+    text-align:center;
+
+}
+
+.emptyIcon{
+
+    font-size:64px;
+
+    margin-bottom:18px;
+
+}
+
+.empty h3{
+
+    font-size:28px;
+
+    margin-bottom:10px;
+
+}
+
+.empty p{
+
+    color:var(--textLight);
+
+    max-width:500px;
+
+    margin:auto;
+
+    line-height:1.7;
+
+}
+
+footer{
+
+    padding:40px 0;
+
+    text-align:center;
+
+    color:var(--textLight);
+
+    font-size:14px;
+
+}
+
+.fadeIn{
+
+    animation:fadeIn .35s ease;
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(12px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+@media(max-width:850px){
+
+    .hero{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+    .summary{
+
+        width:100%;
+
+    }
+
+    .card{
+
+        flex:1;
+
+    }
+
+}
+
+@media(max-width:650px){
+
+    header{
+
+        padding:22px 0;
+
+    }
+
+    .topBar{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+    .hero{
+
+        padding:24px;
+
+    }
+
+    .heroLeft h2{
+
+        font-size:28px;
+
+    }
+
+    .logoText h1{
+
+        font-size:24px;
+
+    }
+
+    .sectionTitle{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:10px;
+
+    }
+
+    .habitList{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .inputRow{
+
+        flex-direction:column;
+
+    }
+
+    .addButton{
+
+        width:100%;
+
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+
+<div class="topBar">
+
+<div class="logo">
+
+<div class="logoCircle">
+✓
+</div>
+
+<div class="logoText">
+
+<h1>Habit Tracker</h1>
+
+<p>Day 1 • Foundation Build</p>
+
+</div>
+
+</div>
+
+<button
+class="themeButton"
+id="themeButton">
+�
+</ button>
+
+</div>
+
+<div class="hero">
+
+<div class="heroLeft">
+
+<h2>Build Better Habits</h2>
+
+<p>
+
+Start small. Stay consistent.
+This first version lets you create and
+manage habits while automatically
+saving everything on your device.
+
+</p>
+
+</div>
+
+<div class="summary">
+
+<div class="card">
+
+<h3 id="habitTotal">
+0
+</h3>
+
+<span>Total Habits</span>
+
+</div>
+
+<div class="card">
+
+<h3>
+�
+</ h3>
+
+<span>Day 1</span>
+
+</div>
+
+</div>
+
+</div>
+
+</header>
+
+<main>
+
+<section class="addHabit">
+
+<h2>Add a Habit</h2>
+
+<div class="inputRow">
+
+<input
+id="habitInput"
+type="text"
+maxlength="50"
+placeholder="Enter a new habit...">
+
+<button
+class="addButton"
+id="addButton">
+
+Add Habit
+
+</button>
+
+</div>
+
+</section>
+
+<div class="sectionTitle">
+
+<h2>Your Habits</h2>
+
+<div
+class="habitCount"
+id="habitCount">
+
+0 habits
+
+</div>
+
+</div>
+
+<div
+class="habitList"
+id="habitList">
+
+<!-- JavaScript inserts habits here -->
+
+</div>
+
+<div
+class="empty"
+id="emptyState">
+
+<div class="emptyIcon">
+�
+</ div>
+
+<h3>No habits yet</h3>
+
+<p>
+
+Create your first habit above.
+Everything will automatically save
+to your browser.
+
+</p>
+
+</div>
+
+</main>
+
+<footer>
+
+Habit Tracker • Day 1 Development Build
+
+</footer>
+
+<script>
+
+const STORAGE_KEY = "habitTracker_day1";
+
+let habits = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+const habitInput = document.getElementById("habitInput");
+const addButton = document.getElementById("addButton");
+const habitList = document.getElementById("habitList");
+const emptyState = document.getElementById("emptyState");
+
+const habitTotal = document.getElementById("habitTotal");
+const habitCount = document.getElementById("habitCount");
+
+const themeButton = document.getElementById("themeButton");
+
+
+
+function saveHabits(){
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(habits)
+    );
+
+}
+
+
+
+function updateCounters(){
+
+    habitTotal.textContent = habits.length;
+
+    if(habits.length === 1){
+
+        habitCount.textContent = "1 habit";
+
+    }else{
+
+        habitCount.textContent = habits.length + " habits";
+
+    }
+
+}
+
+
+
+function createHabitCard(habit,index){
+
+    const card = document.createElement("div");
+
+    card.className = "habit fadeIn";
+
+
+
+    card.innerHTML = `
+
+        <div class="habitHeader">
+
+            <div class="habitName">
+                ${habit.name}
+            </div>
+
+            <button
+                class="deleteButton"
+                data-index="${index}">
+                �️
+            </button>
+
+        </div>
+
+        <div class="habitInfo">
+
+            <span class="badge">
+                New Habit
+            </span>
+
+            <span>
+                Day 1
+            </span>
+
+        </div>
+
+    `;
+
+    return card;
+
+
+
+
+
+function renderHabits(){
+
+    habitList.innerHTML = "";
+
+    if(habits.length === 0){
+
+        emptyState.style.display = "block";
+
+    }else{
+
+        emptyState.style.display = "none";
+
+    }
+
+
+
+    habits.forEach((habit,index)=>{
+
+        habitList.appendChild(
+            createHabitCard(habit,index)
+        );
+
+    });
+
+
+
+    document
+    .querySelectorAll(".deleteButton")
+    .forEach(button=>{
+
+        button.onclick = ()=>{
+
+            deleteHabit(
+                Number(button.dataset.index)
+            );
+
+        };
+
+    });
+
+
+
+    updateCounters();
+
+    saveHabits();
+
+}
+
+// =========================
+// Add Habit
+// =========================
+
+function addHabit(){
+
+    const name = habitInput.value.trim();
+
+    if(name === ""){
+
+        alert("Please enter a habit.");
+
+        return;
+
+    }
+
+    habits.push({
+
+        name:name,
+        created:Date.now()
+
+    });
+
+    habitInput.value = "";
+
+    renderHabits();
+
+}
+
+
+
+// =========================
+// Delete Habit
+// =========================
+
+function deleteHabit(index){
+
+    if(!confirm("Delete this habit?")){
+
+        return;
+
+    }
+
+    habits.splice(index,1);
+
+    renderHabits();
+
+}
+
+
+
+// =========================
+// Add Button
+// =========================
+
+addButton.addEventListener("click",addHabit);
+
+habitInput.addEventListener("keydown",function(event){
+
+    if(event.key==="Enter"){
+
+        addHabit();
+
+    }
+
+});
+
+
+
+// =========================
+// Theme
+// =========================
+
+const savedTheme =
+localStorage.getItem("habit_theme");
+
+if(savedTheme==="dark"){
+
+    document.body.classList.add("dark");
+
+    themeButton.textContent="☀️";
+
+}else{
+
+    themeButton.textContent="�;
+
+
+
+themeButton.onclick=function(){
+
+    document.body.classList.toggle("dark");
+
+    if(document.body.classList.contains("dark")){
+
+        localStorage.setItem(
+            "habit_theme",
+            "dark"
+        );
+
+        themeButton.textContent="☀️";
+
+    }else{
+
+        localStorage.setItem(
+            "habit_theme",
+            "light"
+        );
+
+        themeButton.textContent="�;
+
+    
+
+;
+
+
+
+// =========================
+// Initial Load
+// =========================
+
+renderHabits();
+
+</script>
+
+</body>
+</html>�"}}�"}�}
