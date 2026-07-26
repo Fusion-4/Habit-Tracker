@@ -1,6 +1,6 @@
 /* ==========================================
    Habit Tracker
-   Day 2
+   Day 3
 ========================================== */
 
 "use strict";
@@ -13,7 +13,7 @@ const STORAGE_KEY = "habit_tracker_data";
 const THEME_KEY = "habit_tracker_theme";
 
 /* ==========================================
-   Data
+   Application Data
 ========================================== */
 
 let habits = [];
@@ -22,16 +22,54 @@ let habits = [];
    DOM Elements
 ========================================== */
 
-const habitInput = document.getElementById("habitInput");
-const addButton = document.getElementById("addButton");
-const habitList = document.getElementById("habitList");
-const emptyState = document.getElementById("emptyState");
+const habitInput =
+    document.getElementById("habitInput");
 
-const habitTotal = document.getElementById("habitTotal");
-const habitCount = document.getElementById("habitCount");
-const completedToday = document.getElementById("completedToday");
+const addButton =
+    document.getElementById("addButton");
 
-const themeButton = document.getElementById("themeButton");
+const habitList =
+    document.getElementById("habitList");
+
+const emptyState =
+    document.getElementById("emptyState");
+
+const habitTotal =
+    document.getElementById("habitTotal");
+
+const habitCount =
+    document.getElementById("habitCount");
+
+const completedToday =
+    document.getElementById("completedToday");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const themeButton =
+    document.getElementById("themeButton");
+
+/* ==========================================
+   Date Helpers
+========================================== */
+
+function getTodayString(){
+
+    const today = new Date();
+
+    const year = today.getFullYear();
+
+    const month = String(
+        today.getMonth()+1
+    ).padStart(2,"0");
+
+    const day = String(
+        today.getDate()
+    ).padStart(2,"0");
+
+    return `${year}-${month}-${day}`;
+
+}
 
 /* ==========================================
    Storage
@@ -40,21 +78,27 @@ const themeButton = document.getElementById("themeButton");
 function loadHabits(){
 
     const saved =
-        localStorage.getItem(STORAGE_KEY);
+        localStorage.getItem(
+            STORAGE_KEY
+        );
 
-    if(saved){
+    if(!saved){
 
-        try{
+        habits = [];
 
-            habits = JSON.parse(saved);
+        return;
 
-        }
+    }
 
-        catch{
+    try{
 
-            habits = [];
+        habits = JSON.parse(saved);
 
-        }
+    }
+
+    catch{
+
+        habits = [];
 
     }
 
@@ -73,17 +117,58 @@ function saveHabits(){
 }
 
 /* ==========================================
+   Upgrade Older Saves
+========================================== */
+
+function upgradeHabitData(){
+
+    habits.forEach(habit=>{
+
+        if(typeof habit.name!=="string"){
+
+            habit.name="New Habit";
+
+        }
+
+        if(typeof habit.created!=="number"){
+
+            habit.created=Date.now();
+
+        }
+
+        if(typeof habit.history!=="object"
+            || habit.history===null){
+
+            habit.history={};
+
+        }
+
+        if(typeof habit.streak!=="number"){
+
+            habit.streak=0;
+
+        }
+
+    });
+
+}
+
+/* ==========================================
    Theme
 ========================================== */
 
 function loadTheme(){
 
     const theme =
-        localStorage.getItem(THEME_KEY);
+        localStorage.getItem(
+            THEME_KEY
+        );
 
-    if(theme === "dark"){
+    if(theme==="dark"){
 
-        document.body.classList.add("dark");
+        document.body.classList.add(
+            "dark"
+        );
 
         themeButton.innerHTML =
         '<i class="fa-solid fa-sun"></i>';
@@ -92,7 +177,9 @@ function loadTheme(){
 
     else{
 
-        document.body.classList.remove("dark");
+        document.body.classList.remove(
+            "dark"
+        );
 
         themeButton.innerHTML =
         '<i class="fa-solid fa-moon"></i>';
@@ -103,54 +190,182 @@ function loadTheme(){
 
 function toggleTheme(){
 
-    document.body.classList.toggle("dark");
+    document.body.classList.toggle(
+        "dark"
+    );
 
-    if(document.body.classList.contains("dark")){
-
-        localStorage.setItem(
-
-            THEME_KEY,
-
+    const dark =
+        document.body.classList.contains(
             "dark"
-
         );
 
-        themeButton.innerHTML =
-        '<i class="fa-solid fa-sun"></i>';
+    localStorage.setItem(
+
+        THEME_KEY,
+
+        dark
+        ? "dark"
+        : "light"
+
+    );
+
+    themeButton.innerHTML = dark
+
+        ? '<i class="fa-solid fa-sun"></i>'
+
+        : '<i class="fa-solid fa-moon"></i>';
+
+}
+
+/* ==========================================
+   History System
+========================================== */
+
+function isCompletedToday(habit){
+
+    const today = getTodayString();
+
+    return habit.history[today] === true;
+
+}
+
+function toggleHabit(index){
+
+    const habit = habits[index];
+
+    const today = getTodayString();
+
+    if(isCompletedToday(habit)){
+
+        delete habit.history[today];
 
     }
 
     else{
 
-        localStorage.setItem(
-
-            THEME_KEY,
-
-            "light"
-
-        );
-
-        themeButton.innerHTML =
-        '<i class="fa-solid fa-moon"></i>';
+        habit.history[today] = true;
 
     }
+
+    renderHabits();
 
 }
 
 /* ==========================================
-   Helpers
+   Streak Calculation
 ========================================== */
 
-function updateCounters(){
+function calculateStreak(habit){
 
-    habitTotal.textContent =
-        habits.length;
+    let streak = 0;
 
-    habitCount.textContent =
-        habits.length +
-        (habits.length === 1
-            ? " Habit"
-            : " Habits");
+    const date = new Date();
+
+    while(true){
+
+        const key =
+
+            date.getFullYear() + "-" +
+
+            String(date.getMonth()+1)
+            .padStart(2,"0") + "-" +
+
+            String(date.getDate())
+            .padStart(2,"0");
+
+        if(habit.history[key]){
+
+            streak++;
+
+        }
+
+        else{
+
+            break;
+
+        }
+
+        date.setDate(
+
+            date.getDate()-1
+
+        );
+
+    }
+
+    return streak;
+
+}
+
+/* ==========================================
+   Weekly Statistics
+========================================== */
+
+function getWeeklyCompletion(habit){
+
+    let completed = 0;
+
+    for(let i=0;i<7;i++){
+
+        const date = new Date();
+
+        date.setDate(
+
+            date.getDate()-i
+
+        );
+
+        const key =
+
+            date.getFullYear()+"-"+
+
+            String(date.getMonth()+1)
+            .padStart(2,"0")+"-"+
+
+            String(date.getDate())
+            .padStart(2,"0");
+
+        if(habit.history[key]){
+
+            completed++;
+
+        }
+
+    }
+
+    return completed;
+
+}
+
+/* ==========================================
+   Last Completed
+========================================== */
+
+function getLastCompleted(habit){
+
+    const dates =
+
+        Object.keys(habit.history);
+
+    if(dates.length===0){
+
+        return "Never";
+
+    }
+
+    dates.sort();
+
+    const latest = dates[dates.length-1];
+
+    const today = getTodayString();
+
+    if(latest===today){
+
+        return "Today";
+
+    }
+
+    return latest;
 
 }
 
@@ -160,20 +375,63 @@ function updateCounters(){
 
 function updateProgress(){
 
-    if(habits.length === 0){
+    if(habits.length===0){
 
-        completedToday.textContent = "0%";
+        completedToday.textContent="0%";
+
+        if(progressBar){
+
+            progressBar.style.width="0%";
+
+        }
+
         return;
 
     }
 
-    const completed =
-        habits.filter(habit => habit.completed).length;
+    const completed = habits.filter(
 
-    const percent =
-        Math.round((completed / habits.length) * 100);
+        habit=>isCompletedToday(habit)
 
-    completedToday.textContent = percent + "%";
+    ).length;
+
+    const percent = Math.round(
+
+        completed/habits.length*100
+
+    );
+
+    completedToday.textContent=
+
+        percent+"%";
+
+    if(progressBar){
+
+        progressBar.style.width=
+
+            percent+"%";
+
+    }
+
+}
+
+/* ==========================================
+   Counters
+========================================== */
+
+function updateCounters(){
+
+    habitTotal.textContent = habits.length;
+
+    habitCount.textContent =
+
+        habits.length +
+
+        (habits.length===1
+
+            ? " Habit"
+
+            : " Habits");
 
 }
 
@@ -191,30 +449,54 @@ function createHabitCard(habit,index){
 
         <div class="habitHeader">
 
-            <div>
+            <div class="habitLeft">
 
                 <div class="habitName">
+
                     ${habit.name}
+
                 </div>
 
                 <div class="habitInfo">
 
                     <span class="badge">
 
-                        <i class="fa-solid fa-calendar-day"></i>
+                        <i class="fa-solid fa-fire"></i>
 
-                        Daily Habit
+                        ${habit.streak} Day${habit.streak===1?"":"s"}
+
+                    </span>
+
+                    <span class="badge">
+
+                        <i class="fa-solid fa-chart-column"></i>
+
+                        ${getWeeklyCompletion(habit)}/7 Week
 
                     </span>
 
                 </div>
 
+                <div class="lastCompleted">
+
+                    Last Completed:
+
+                    <strong>
+
+                        ${getLastCompleted(habit)}
+
+                    </strong>
+
+                </div>
+
             </div>
 
-            <div style="display:flex;gap:10px;">
+            <div class="habitButtons">
 
                 <button
-                    class="completeButton ${habit.completed ? "completed" : ""}"
+
+                    class="completeButton ${isCompletedToday(habit) ? "completed" : ""}"
+
                     data-index="${index}">
 
                     <i class="fa-solid fa-check"></i>
@@ -222,7 +504,9 @@ function createHabitCard(habit,index){
                 </button>
 
                 <button
+
                     class="deleteButton"
+
                     data-index="${index}">
 
                     <i class="fa-solid fa-trash"></i>
@@ -239,147 +523,41 @@ function createHabitCard(habit,index){
 
 }
 
-
 /* ==========================================
-   Add Habit
+   Rendering
 ========================================== */
-
-function addHabit(){
-
-    const name =
-        habitInput.value.trim();
-
-    if(name === ""){
-
-        alert("Please enter a habit.");
-
-        return;
-
-    }
-
-    habits.push({
-
-        name:name,
-
-        completed:false,
-
-        created:Date.now()
-
-    });
-
-    habitInput.value = "";
-
-    renderHabits();
-
-}
-
-/* ==========================================
-   Complete Habit
-========================================== */
-
-function toggleHabit(index){
-
-    habits[index].completed =
-        !habits[index].completed;
-
-    renderHabits();
-
-}
-
-/* ==========================================
-   Delete Habit
-========================================== */
-
-function deleteHabit(index){
-
-    const confirmed = confirm(
-        "Delete this habit?"
-    );
-
-    if(!confirmed){
-
-        return;
-
-    }
-
-    habits.splice(index,1);
-
-    renderHabits();
-
-}
-
-/* ==========================================
-   Attach Button Events
-========================================== */
-
-function attachEvents(){
-
-    /* Complete Buttons */
-
-    document
-        .querySelectorAll(".completeButton")
-        .forEach(button=>{
-
-            button.addEventListener("click",()=>{
-
-                toggleHabit(
-
-                    Number(
-                        button.dataset.index
-                    )
-
-                );
-
-            });
-
-        });
-
-    /* Delete Buttons */
-
-    document
-        .querySelectorAll(".deleteButton")
-        .forEach(button=>{
-
-            button.addEventListener("click",()=>{
-
-                deleteHabit(
-
-                    Number(
-                        button.dataset.index
-                    )
-
-                );
-
-            });
-
-        });
-
-}
-
-/* ==========================================
-   Update Render Function
-========================================== */
-
-/*
-Replace your current renderHabits()
-function with this one.
-*/
 
 function renderHabits(){
 
-    habitList.innerHTML = "";
+    habitList.innerHTML="";
 
     if(habits.length===0){
 
-        emptyState.classList.remove("hidden");
+        emptyState.classList.remove(
+
+            "hidden"
+
+        );
 
     }
 
     else{
 
-        emptyState.classList.add("hidden");
+        emptyState.classList.add(
+
+            "hidden"
+
+        );
 
     }
+
+    habits.forEach(habit=>{
+
+        habit.streak =
+
+            calculateStreak(habit);
+
+    });
 
     habits.forEach((habit,index)=>{
 
@@ -408,7 +586,125 @@ function renderHabits(){
 }
 
 /* ==========================================
-   Global Events
+   Add Habit
+========================================== */
+
+function addHabit(){
+
+    const name =
+
+        habitInput.value.trim();
+
+    if(name===""){
+
+        alert(
+
+            "Please enter a habit."
+
+        );
+
+        return;
+
+    }
+
+    habits.push({
+
+        name:name,
+
+        created:Date.now(),
+
+        history:{},
+
+        streak:0
+
+    });
+
+    habitInput.value="";
+
+    renderHabits();
+
+}
+
+/* ==========================================
+   Delete Habit
+========================================== */
+
+function deleteHabit(index){
+
+    if(!confirm(
+
+        "Delete this habit?"
+
+    )){
+
+        return;
+
+    }
+
+    habits.splice(index,1);
+
+    renderHabits();
+
+}
+
+/* ==========================================
+   Button Events
+========================================== */
+
+function attachEvents(){
+
+    document
+        .querySelectorAll(".completeButton")
+        .forEach(button=>{
+
+            button.addEventListener(
+
+                "click",
+
+                ()=>{
+
+                    toggleHabit(
+
+                        Number(
+                            button.dataset.index
+                        )
+
+                    );
+
+                }
+
+            );
+
+        });
+
+    document
+        .querySelectorAll(".deleteButton")
+        .forEach(button=>{
+
+            button.addEventListener(
+
+                "click",
+
+                ()=>{
+
+                    deleteHabit(
+
+                        Number(
+                            button.dataset.index
+                        )
+
+                    );
+
+                }
+
+            );
+
+        });
+
+}
+
+/* ==========================================
+   Input Events
 ========================================== */
 
 addButton.addEventListener(
@@ -444,116 +740,49 @@ themeButton.addEventListener(
 );
 
 /* ==========================================
-   Daily Reset
+   Daily Maintenance
 ========================================== */
 
-function getTodayString(){
+function cleanupHistory(){
 
-    const today = new Date();
+    const cutoff = new Date();
 
-    return today.getFullYear() + "-" +
-        String(today.getMonth() + 1).padStart(2,"0") + "-" +
-        String(today.getDate()).padStart(2,"0");
+    cutoff.setDate(
 
-}
+        cutoff.getDate()-365
 
-function resetDailyCompletion(){
+    );
 
-    const today = getTodayString();
+    const cutoffKey =
+
+        cutoff.getFullYear()+"-"+
+
+        String(cutoff.getMonth()+1)
+        .padStart(2,"0")+"-"+
+
+        String(cutoff.getDate())
+        .padStart(2,"0");
 
     habits.forEach(habit=>{
 
-        if(habit.lastCompleted !== today){
+        Object.keys(habit.history)
 
-            habit.completed = false;
+        .forEach(date=>{
 
-        }
+            if(date < cutoffKey){
+
+                delete habit.history[date];
+
+            }
+
+        });
 
     });
 
 }
 
 /* ==========================================
-   Future Compatibility
-========================================== */
-
-function upgradeHabitData(){
-
-    habits.forEach(habit=>{
-
-        if(habit.completed === undefined){
-
-            habit.completed = false;
-
-        }
-
-        if(habit.created === undefined){
-
-            habit.created = Date.now();
-
-        }
-
-        if(habit.lastCompleted === undefined){
-
-            habit.lastCompleted = "";
-
-        }
-
-        if(habit.streak === undefined){
-
-            habit.streak = 0;
-
-        }
-
-    });
-
-}
-
-/* ==========================================
-   Update Toggle Function
-========================================== */
-
-/*
-Replace your current toggleHabit()
-function with this version.
-*/
-
-function toggleHabit(index){
-
-    habits[index].completed =
-        !habits[index].completed;
-
-    if(habits[index].completed){
-
-        habits[index].lastCompleted =
-            getTodayString();
-
-    }
-
-    renderHabits();
-
-}
-
-/* ==========================================
-   Mobile Improvements
-========================================== */
-
-document.addEventListener(
-
-    "touchstart",
-
-    function(){},
-
-    {
-
-        passive:true
-
-    }
-
-);
-
-/* ==========================================
-   Initialize App
+   Initialization
 ========================================== */
 
 function initialize(){
@@ -562,7 +791,7 @@ function initialize(){
 
     upgradeHabitData();
 
-    resetDailyCompletion();
+    cleanupHistory();
 
     loadTheme();
 
@@ -570,5 +799,8 @@ function initialize(){
 
 }
 
-initialize();
+/* ==========================================
+   Start App
+========================================== */
 
+initialize();

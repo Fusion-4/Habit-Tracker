@@ -1,76 +1,151 @@
-/* ==========================================
-   Habit Tracker
-   Day 2
-========================================== */
+/* ==========================================================
+   HABIT TRACKER
+   Day 3
+   Part 1
+   ========================================================== */
 
-*{
+/* ==========================================================
+   RESET
+   ========================================================== */
+
+*,
+*::before,
+*::after{
     margin:0;
     padding:0;
     box-sizing:border-box;
 }
 
-:root{
-
-    --bg:#f5f7fb;
-    --surface:#ffffff;
-
-    --primary:#4f46e5;
-    --primaryHover:#4338ca;
-
-    --text:#111827;
-    --textLight:#6b7280;
-
-    --border:#e5e7eb;
-
-    --success:#16a34a;
-    --danger:#dc2626;
-
-    --shadow:
-        0 10px 30px rgba(0,0,0,.08);
-
-    --radius:18px;
-
-    --transition:.25s;
-
-}
-
-body.dark{
-
-    --bg:#111827;
-    --surface:#1f2937;
-
-    --text:#f9fafb;
-    --textLight:#9ca3af;
-
-    --border:#374151;
-
+html{
+    scroll-behavior:smooth;
 }
 
 body{
 
     font-family:"Inter",sans-serif;
 
-    background:var(--bg);
+    background:#f4f7fb;
+
+    color:#1f2937;
+
+    min-height:100vh;
+
+    line-height:1.5;
+
+    transition:
+        background .3s,
+        color .3s;
+
+}
+
+/* ==========================================================
+   VARIABLES
+   ========================================================== */
+
+:root{
+
+    --primary:#4f46e5;
+    --primary-dark:#4338ca;
+
+    --green:#22c55e;
+    --red:#ef4444;
+
+    --white:#ffffff;
+
+    --background:#f4f7fb;
+
+    --card:#ffffff;
+
+    --border:#e5e7eb;
+
+    --text:#1f2937;
+
+    --muted:#6b7280;
+
+    --shadow:
+        0 10px 30px rgba(0,0,0,.08);
+
+    --radius:18px;
+
+    --transition:.25s ease;
+
+}
+
+/* ==========================================================
+   DARK MODE
+   ========================================================== */
+
+body.dark{
+
+    --background:#111827;
+
+    --card:#1f2937;
+
+    --border:#374151;
+
+    --text:#f3f4f6;
+
+    --muted:#9ca3af;
+
+    background:var(--background);
 
     color:var(--text);
 
-    transition:var(--transition);
+}
+
+/* ==========================================================
+   TYPOGRAPHY
+   ========================================================== */
+
+h1{
+
+    font-size:2rem;
+
+    font-weight:700;
 
 }
+
+h2{
+
+    font-size:1.5rem;
+
+    font-weight:700;
+
+}
+
+h3{
+
+    font-size:1.2rem;
+
+    font-weight:600;
+
+}
+
+p{
+
+    color:var(--muted);
+
+}
+
+strong{
+
+    color:var(--text);
+
+}
+
+/* ==========================================================
+   LAYOUT
+   ========================================================== */
 
 .container{
 
-    width:min(1100px,92%);
+    max-width:1200px;
 
     margin:auto;
 
-    padding:40px 0;
+    padding:32px;
 
 }
-
-/* ==========================
-   Header
-========================== */
 
 header{
 
@@ -78,15 +153,43 @@ header{
 
 }
 
+main{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:28px;
+
+}
+
+footer{
+
+    margin-top:60px;
+
+    text-align:center;
+
+    color:var(--muted);
+
+    font-size:.95rem;
+
+}
+
+/* ==========================================================
+   TOP BAR
+   ========================================================== */
+
 .topBar{
 
     display:flex;
 
-    justify-content:space-between;
-
     align-items:center;
 
-    margin-bottom:40px;
+    justify-content:space-between;
+
+    gap:20px;
+
+    margin-bottom:32px;
 
 }
 
@@ -98,19 +201,19 @@ header{
 
     gap:18px;
 
+    flex:1;
+
+    min-width:0;
+
 }
 
 .logoCircle{
 
-    width:60px;
+    width:58px;
 
-    height:60px;
+    height:58px;
 
     border-radius:50%;
-
-    background:var(--primary);
-
-    color:white;
 
     display:flex;
 
@@ -118,29 +221,27 @@ header{
 
     align-items:center;
 
-    font-size:24px;
+    background:var(--primary);
 
-    box-shadow:var(--shadow);
+    color:white;
+
+    font-size:1.5rem;
+
+    flex-shrink:0;
 
 }
 
-.logoText h1{
+.logoText{
 
-    font-size:2rem;
+    min-width:0;
 
 }
 
 .logoText p{
 
-    color:var(--textLight);
-
     margin-top:4px;
 
 }
-
-/* ==========================
-   Theme Button
-========================== */
 
 .themeButton{
 
@@ -150,31 +251,39 @@ header{
 
     border:none;
 
-    border-radius:50%;
+    border-radius:14px;
 
-    background:var(--surface);
+    background:var(--card);
 
     color:var(--text);
 
-    cursor:pointer;
+    font-size:1.2rem;
 
-    font-size:20px;
+    cursor:pointer;
 
     box-shadow:var(--shadow);
 
     transition:var(--transition);
 
+    flex-shrink:0;
+
 }
 
 .themeButton:hover{
 
-    transform:rotate(15deg) scale(1.05);
+    transform:translateY(-2px);
 
 }
 
-/* ==========================
-   Hero
-========================== */
+.themeButton:active{
+
+    transform:scale(.96);
+
+}
+
+/* ==========================================================
+   HERO
+   ========================================================== */
 
 .hero{
 
@@ -182,11 +291,9 @@ header{
 
     justify-content:space-between;
 
-    align-items:center;
+    align-items:flex-start;
 
-    gap:30px;
-
-    flex-wrap:wrap;
+    gap:28px;
 
 }
 
@@ -194,55 +301,39 @@ header{
 
     flex:1;
 
-    min-width:280px;
-
-}
-
-.heroLeft h2{
-
-    font-size:2.5rem;
-
-    margin-bottom:12px;
-
-    line-height:1.2;
-
 }
 
 .heroLeft p{
 
-    color:var(--textLight);
+    margin-top:12px;
 
-    max-width:600px;
-
-    line-height:1.7;
+    max-width:650px;
 
 }
 
-/* ==========================
-   Summary Cards
-========================== */
+/* ==========================================================
+   SUMMARY
+   ========================================================== */
 
 .summary{
 
-    display:flex;
+    display:grid;
+
+    grid-template-columns:repeat(2,170px);
 
     gap:18px;
-
-    flex-wrap:wrap;
 
 }
 
 .card{
 
-    background:var(--surface);
+    background:var(--card);
 
-    padding:24px;
+    border:1px solid var(--border);
 
     border-radius:var(--radius);
 
-    min-width:170px;
-
-    text-align:center;
+    padding:24px;
 
     box-shadow:var(--shadow);
 
@@ -252,7 +343,7 @@ header{
 
 .card:hover{
 
-    transform:translateY(-4px);
+    transform:translateY(-3px);
 
 }
 
@@ -260,31 +351,71 @@ header{
 
     font-size:2rem;
 
-    margin-bottom:8px;
-
-    color:var(--primary);
+    margin-bottom:6px;
 
 }
 
 .card span{
 
-    color:var(--textLight);
+    color:var(--muted);
+
+    font-size:.95rem;
 
 }
 
-/* ==========================
-   Add Habit
-========================== */
+/* ==========================================================
+   UTILITIES
+   ========================================================== */
+
+.hidden{
+
+    display:none !important;
+
+}
+
+.textMuted{
+
+    color:var(--muted);
+
+}
+
+.fadeIn{
+
+    animation:fadeIn .35s ease;
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+        transform:translateY(12px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+}
+
+/* ==========================================================
+   ADD HABIT SECTION
+   ========================================================== */
 
 .addHabit{
 
-    background:var(--surface);
+    background:var(--card);
 
-    margin:40px 0;
-
-    padding:28px;
+    border:1px solid var(--border);
 
     border-radius:var(--radius);
+
+    padding:28px;
 
     box-shadow:var(--shadow);
 
@@ -292,7 +423,7 @@ header{
 
 .addHabit h2{
 
-    margin-bottom:18px;
+    margin-bottom:20px;
 
 }
 
@@ -300,57 +431,55 @@ header{
 
     display:flex;
 
-    gap:15px;
+    gap:14px;
 
-    flex-wrap:wrap;
+    align-items:center;
 
 }
 
-#habitInput{
+.inputRow input{
 
     flex:1;
 
-    min-width:220px;
+    height:54px;
 
-    padding:16px;
+    padding:0 18px;
 
-    border:2px solid var(--border);
+    border:1px solid var(--border);
 
     border-radius:14px;
 
-    background:var(--surface);
+    background:var(--background);
 
     color:var(--text);
 
-    font-size:16px;
+    font-size:1rem;
+
+    outline:none;
 
     transition:var(--transition);
 
 }
 
-#habitInput:focus{
-
-    outline:none;
+.inputRow input:focus{
 
     border-color:var(--primary);
 
+    box-shadow:0 0 0 4px rgba(79,70,229,.15);
+
 }
 
-/* ==========================
-   Buttons
-========================== */
+.inputRow input::placeholder{
+
+    color:var(--muted);
+
+}
 
 .addButton{
 
-    display:flex;
+    height:54px;
 
-    align-items:center;
-
-    justify-content:center;
-
-    gap:10px;
-
-    padding:16px 24px;
+    padding:0 26px;
 
     border:none;
 
@@ -360,7 +489,7 @@ header{
 
     color:white;
 
-    font-size:16px;
+    font-size:1rem;
 
     font-weight:600;
 
@@ -368,11 +497,13 @@ header{
 
     transition:var(--transition);
 
+    white-space:nowrap;
+
 }
 
 .addButton:hover{
 
-    background:var(--primaryHover);
+    background:var(--primary-dark);
 
     transform:translateY(-2px);
 
@@ -380,13 +511,13 @@ header{
 
 .addButton:active{
 
-    transform:scale(.98);
+    transform:scale(.97);
 
 }
 
-/* ==========================
-   Section Title
-========================== */
+/* ==========================================================
+   SECTION TITLE
+   ========================================================== */
 
 .sectionTitle{
 
@@ -396,24 +527,21 @@ header{
 
     align-items:center;
 
-    margin-bottom:20px;
-
-    flex-wrap:wrap;
-
-    gap:10px;
+    gap:20px;
 
 }
 
 .habitCount{
 
-    color:var(--textLight);
+    color:var(--muted);
 
     font-weight:600;
 
 }
-/* ==========================
-   Habit List
-========================== */
+
+/* ==========================================================
+   HABIT LIST
+   ========================================================== */
 
 .habitList{
 
@@ -425,13 +553,15 @@ header{
 
 }
 
-/* ==========================
-   Habit Card
-========================== */
+/* ==========================================================
+   HABIT CARD
+   ========================================================== */
 
 .habit{
 
-    background:var(--surface);
+    background:var(--card);
+
+    border:1px solid var(--border);
 
     border-radius:var(--radius);
 
@@ -441,17 +571,11 @@ header{
 
     transition:var(--transition);
 
-    animation:fadeIn .3s ease;
-
-    border:2px solid transparent;
-
 }
 
 .habit:hover{
 
     transform:translateY(-3px);
-
-    border-color:var(--primary);
 
 }
 
@@ -461,9 +585,17 @@ header{
 
     justify-content:space-between;
 
-    align-items:center;
+    align-items:flex-start;
 
-    gap:15px;
+    gap:20px;
+
+}
+
+.habitLeft{
+
+    flex:1;
+
+    min-width:0;
 
 }
 
@@ -471,29 +603,31 @@ header{
 
     font-size:1.15rem;
 
-    font-weight:600;
+    font-weight:700;
+
+    color:var(--text);
+
+    overflow-wrap:anywhere;
 
     word-break:break-word;
 
 }
 
+/* ==========================================================
+   BADGES
+   ========================================================== */
+
 .habitInfo{
 
     display:flex;
 
-    align-items:center;
+    flex-wrap:wrap;
 
     gap:10px;
 
-    margin-top:18px;
-
-    flex-wrap:wrap;
+    margin-top:12px;
 
 }
-
-/* ==========================
-   Badge
-========================== */
 
 .badge{
 
@@ -501,229 +635,88 @@ header{
 
     align-items:center;
 
-    gap:6px;
+    gap:8px;
 
-    padding:6px 12px;
+    padding:7px 12px;
 
     border-radius:999px;
 
-    background:#eef2ff;
+    background:rgba(79,70,229,.08);
 
     color:var(--primary);
 
-    font-size:.85rem;
+    font-size:.88rem;
 
     font-weight:600;
 
 }
 
-/* ==========================
-   Delete Button
-========================== */
+.badge i{
 
+    font-size:.9rem;
+
+}
+
+/* ==========================================================
+   LAST COMPLETED
+   ========================================================== */
+
+.lastCompleted{
+
+    margin-top:14px;
+
+    font-size:.92rem;
+
+    color:var(--muted);
+
+}
+
+/* ==========================================================
+   HABIT BUTTONS
+   ========================================================== */
+
+.habitButtons{
+
+    display:flex;
+
+    gap:12px;
+
+    flex-shrink:0;
+
+    align-items:flex-start;
+
+}
+
+.completeButton,
 .deleteButton{
 
-    width:42px;
+    width:48px;
 
-    height:42px;
+    height:48px;
 
     border:none;
 
-    border-radius:12px;
-
-    background:#fee2e2;
-
-    color:var(--danger);
+    border-radius:14px;
 
     cursor:pointer;
 
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    font-size:16px;
+    font-size:1rem;
 
     transition:var(--transition);
 
 }
-
-.deleteButton:hover{
-
-    background:#fecaca;
-
-    transform:scale(1.08);
-
-}
-
-.deleteButton:active{
-
-    transform:scale(.95);
-
-}
-
-/* ==========================
-   Empty State
-========================== */
-
-.empty{
-
-    text-align:center;
-
-    padding:70px 20px;
-
-    background:var(--surface);
-
-    border-radius:var(--radius);
-
-    box-shadow:var(--shadow);
-
-    margin-top:20px;
-
-}
-
-.emptyIcon{
-
-    font-size:72px;
-
-    color:var(--primary);
-
-    margin-bottom:20px;
-
-}
-
-.empty h3{
-
-    margin-bottom:10px;
-
-    font-size:1.5rem;
-
-}
-
-.empty p{
-
-    color:var(--textLight);
-
-    max-width:420px;
-
-    margin:auto;
-
-    line-height:1.7;
-
-}
-
-/* ==========================
-   Footer
-========================== */
-
-footer{
-
-    margin-top:60px;
-
-    text-align:center;
-
-    color:var(--textLight);
-
-    padding:25px 0;
-
-    border-top:1px solid var(--border);
-
-}
-
-/* ==========================
-   Animations
-========================== */
-
-@keyframes fadeIn{
-
-    from{
-
-        opacity:0;
-
-        transform:translateY(12px);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:translateY(0);
-
-    }
-
-}
-
-/* ==========================
-   Progress Bar
-========================== */
-
-.progressContainer{
-
-    width:100%;
-
-    height:12px;
-
-    background:var(--border);
-
-    border-radius:999px;
-
-    overflow:hidden;
-
-    margin-top:15px;
-
-}
-
-.progressBar{
-
-    width:0%;
-
-    height:100%;
-
-    background:linear-gradient(
-        90deg,
-        var(--primary),
-        #6366f1
-    );
-
-    transition:width .4s ease;
-
-}
-
-/* ==========================
-   Checkbox
-========================== */
 
 .completeButton{
 
-    width:42px;
+    background:#e8f8ef;
 
-    height:42px;
-
-    border-radius:12px;
-
-    border:2px solid var(--primary);
-
-    background:transparent;
-
-    color:var(--primary);
-
-    cursor:pointer;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    transition:var(--transition);
+    color:var(--green);
 
 }
 
 .completeButton:hover{
 
-    background:var(--primary);
+    background:var(--green);
 
     color:white;
 
@@ -731,71 +724,233 @@ footer{
 
 .completeButton.completed{
 
-    background:var(--success);
-
-    border-color:var(--success);
+    background:var(--green);
 
     color:white;
 
 }
 
-/* ==========================
-   Utility Classes
-========================== */
+.deleteButton{
 
-.hidden{
+    background:#fdecec;
 
-    display:none !important;
+    color:var(--red);
 
 }
 
-.center{
+.deleteButton:hover{
 
-    display:flex;
+    background:var(--red);
 
-    justify-content:center;
-
-    align-items:center;
+    color:white;
 
 }
 
-.textMuted{
+.completeButton:active,
+.deleteButton:active{
 
-    color:var(--textLight);
-
-}
-
-.textSuccess{
-
-    color:var(--success);
+    transform:scale(.95);
 
 }
 
-.textDanger{
+/* ==========================================================
+   PROGRESS BAR
+   ========================================================== */
 
-    color:var(--danger);
+.progressContainer{
+
+    width:100%;
+
+    height:8px;
+
+    margin-top:14px;
+
+    border-radius:999px;
+
+    background:#e5e7eb;
+
+    overflow:hidden;
 
 }
 
-/* ==========================
-   Scrollbar
-========================== */
+.progressBar{
+
+    width:0;
+
+    height:100%;
+
+    background:linear-gradient(
+        90deg,
+        #22c55e,
+        #16a34a
+    );
+
+    transition:width .35s ease;
+
+}
+
+/* ==========================================================
+   EMPTY STATE
+   ========================================================== */
+
+.empty{
+
+    padding:70px 30px;
+
+    text-align:center;
+
+    background:var(--card);
+
+    border:2px dashed var(--border);
+
+    border-radius:var(--radius);
+
+}
+
+.emptyIcon{
+
+    font-size:4rem;
+
+    margin-bottom:18px;
+
+}
+
+.empty h3{
+
+    margin-bottom:10px;
+
+}
+
+.empty p{
+
+    max-width:420px;
+
+    margin:0 auto;
+
+}
+
+/* ==========================================================
+   DESKTOP POLISH
+   ========================================================== */
+
+button,
+input{
+
+    font-family:inherit;
+
+}
+
+button{
+
+    user-select:none;
+
+    -webkit-tap-highlight-color:transparent;
+
+}
+
+input{
+
+    -webkit-appearance:none;
+
+    appearance:none;
+
+}
+
+/* ==========================================================
+   HOVER EFFECTS
+   ========================================================== */
+
+.habit,
+.card,
+.addHabit{
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease,
+        background .25s ease;
+
+}
+
+.habit:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:
+
+        0 18px 36px rgba(0,0,0,.10);
+
+}
+
+.card:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.addHabit:hover{
+
+    border-color:rgba(79,70,229,.30);
+
+}
+
+.themeButton:hover{
+
+    box-shadow:
+
+        0 12px 28px rgba(0,0,0,.12);
+
+}
+
+/* ==========================================================
+   BUTTON ANIMATIONS
+   ========================================================== */
+
+.completeButton,
+.deleteButton,
+.addButton,
+.themeButton{
+
+    transition:
+
+        transform .18s ease,
+
+        background .25s ease,
+
+        color .25s ease,
+
+        box-shadow .25s ease;
+
+}
+
+.completeButton:active,
+.deleteButton:active,
+.addButton:active,
+.themeButton:active{
+
+    transform:scale(.94);
+
+}
+
+/* ==========================================================
+   SCROLLBAR
+   ========================================================== */
 
 ::-webkit-scrollbar{
 
-    width:10px;
+    width:12px;
 
 }
 
 ::-webkit-scrollbar-track{
 
-    background:var(--bg);
+    background:var(--background);
 
 }
 
 ::-webkit-scrollbar-thumb{
 
-    background:var(--primary);
+    background:#bfc6d3;
 
     border-radius:999px;
 
@@ -803,109 +958,277 @@ footer{
 
 ::-webkit-scrollbar-thumb:hover{
 
-    background:var(--primaryHovelr);
+    background:#9ca3af;
 
 }
 
-/* ==========================
-   Responsive
-========================== */
+/* Firefox */
 
-@media (max-width:900px){
+*{
 
-    .hero{
+    scrollbar-width:thin;
 
-        flex-direction:column;
+}
 
-        align-items:flex-start;
+/* ==========================================================
+   DARK MODE
+   ========================================================== */
+
+body.dark .card,
+
+body.dark .habit,
+
+body.dark .addHabit,
+
+body.dark .themeButton{
+
+    background:var(--card);
+
+}
+
+body.dark input{
+
+    background:#111827;
+
+    color:var(--text);
+
+    border-color:var(--border);
+
+}
+
+body.dark input::placeholder{
+
+    color:#9ca3af;
+
+}
+
+body.dark .progressContainer{
+
+    background:#374151;
+
+}
+
+body.dark .badge{
+
+    background:
+
+        rgba(99,102,241,.18);
+
+    color:#c7d2fe;
+
+}
+
+body.dark .completeButton{
+
+    background:
+
+        rgba(34,197,94,.18);
+
+    color:#4ade80;
+
+}
+
+body.dark .completeButton.completed{
+
+    background:#22c55e;
+
+    color:white;
+
+}
+
+body.dark .deleteButton{
+
+    background:
+
+        rgba(239,68,68,.18);
+
+    color:#f87171;
+
+}
+
+body.dark .empty{
+
+    border-color:#374151;
+
+}
+
+body.dark .logoCircle{
+
+    background:
+
+        linear-gradient(
+
+            135deg,
+
+            #6366f1,
+
+            #4f46e5
+
+        );
+
+}
+
+/* ==========================================================
+   ACCESSIBILITY
+   ========================================================== */
+
+button:focus-visible,
+
+input:focus-visible{
+
+    outline:3px solid
+
+        rgba(79,70,229,.35);
+
+    outline-offset:3px;
+
+}
+
+/* ==========================================================
+   SELECTION
+   ========================================================== */
+
+::selection{
+
+    background:#6366f1;
+
+    color:white;
+
+}
+
+/* ==========================================================
+   SMOOTH TRANSITIONS
+   ========================================================== */
+
+body,
+
+.card,
+
+.habit,
+
+.addHabit,
+
+.themeButton,
+
+input,
+
+button{
+
+    transition:
+
+        background .25s ease,
+
+        color .25s ease,
+
+        border-color .25s ease,
+
+        box-shadow .25s ease;
+
+}
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (max-width:1000px){
+
+    .container{
+
+        max-width:900px;
+
+        padding:24px;
 
     }
 
     .summary{
 
-        width:100%;
+        grid-template-columns:
+
+            repeat(2,1fr);
+
+    }
+
+    .hero{
+
+        flex-direction:column;
+
+        gap:24px;
+
+    }
+
+}
+
+/* ==========================================================
+   SMALL LAPTOPS
+   ========================================================== */
+
+@media (max-width:800px){
+
+    h1{
+
+        font-size:1.8rem;
+
+    }
+
+    h2{
+
+        font-size:1.35rem;
+
+    }
+
+    .container{
+
+        padding:20px;
 
     }
 
     .card{
 
-        flex:1;
+        padding:20px;
+
+    }
+
+    .habit{
+
+        padding:20px;
 
     }
 
 }
 
-@media (max-width:700px){
+/* ==========================================================
+   MOBILE (768px)
+   ========================================================== */
+
+@media (max-width:768px){
 
     .container{
 
-        width:95%;
-
-        padding:20px 0;
+        padding:18px;
 
     }
+
+    /* ---------- Header ---------- */
 
     .topBar{
 
-        flex-direction:column;
-
-        gap:20px;
-
         align-items:flex-start;
 
-    }
-
-    .inputRow{
-
-        flex-direction:column;
+        gap:16px;
 
     }
 
-    .addButton{
+    .logo{
 
-        width:100%;
-
-    }
-
-    .sectionTitle{
-
-        flex-direction:column;
-
-        align-items:flex-start;
+        gap:12px;
 
     }
-
-    .habitHeader{
-
-        flex-direction:column;
-
-        align-items:flex-start;
-
-    }
-
-    .deleteButton{
-
-        align-self:flex-end;
-
-    }
-
-    .heroLeft h2{
-
-        font-size:2rem;
-
-    }
-
-}
-
-@media (max-width:450px){
 
     .logoCircle{
 
         width:50px;
-
         height:50px;
-
-        font-size:20px;
+        font-size:1.2rem;
 
     }
 
@@ -915,9 +1238,178 @@ footer{
 
     }
 
-    .heroLeft h2{
+    .logoText p{
 
-        font-size:1.7rem;
+        font-size:.85rem;
+
+    }
+
+    .themeButton{
+
+        width:48px;
+        height:48px;
+
+        flex-shrink:0;
+
+    }
+
+    /* ---------- Hero ---------- */
+
+    .hero{
+
+        flex-direction:column;
+
+        gap:20px;
+
+    }
+
+    .heroLeft{
+
+        width:100%;
+
+    }
+
+    .heroLeft p{
+
+        max-width:none;
+
+    }
+
+    .summary{
+
+        width:100%;
+
+        grid-template-columns:1fr 1fr;
+
+        gap:14px;
+
+    }
+
+    .card{
+
+        padding:18px;
+
+    }
+
+    .card h3{
+
+        font-size:1.6rem;
+
+    }
+
+    /* ---------- Add Habit ---------- */
+
+    .inputRow{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+    .inputRow input{
+
+        width:100%;
+
+    }
+
+    .addButton{
+
+        width:100%;
+
+    }
+
+    /* ---------- Habit Cards ---------- */
+
+    .habit{
+
+        padding:18px;
+
+    }
+
+    .habitHeader{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:18px;
+
+    }
+
+    .habitButtons{
+
+        width:100%;
+
+        justify-content:flex-end;
+
+    }
+
+    .habitInfo{
+
+        gap:8px;
+
+        flex-wrap:wrap;
+
+    }
+
+    .badge{
+
+        font-size:.82rem;
+
+    }
+
+}
+
+/* ==========================================================
+   SMALL PHONES (480px)
+   ========================================================== */
+
+@media (max-width:480px){
+
+    .container{
+
+        padding:14px;
+
+    }
+
+    .topBar{
+
+        align-items:center;
+
+    }
+
+    .logoCircle{
+
+        width:44px;
+        height:44px;
+
+        font-size:1rem;
+
+    }
+
+    .logoText h1{
+
+        font-size:1.25rem;
+
+    }
+
+    .logoText p{
+
+        font-size:.75rem;
+
+    }
+
+    .themeButton{
+
+        width:44px;
+        height:44px;
+
+    }
+
+    .summary{
+
+        grid-template-columns:1fr;
 
     }
 
@@ -927,33 +1419,178 @@ footer{
 
     }
 
-}
+    .habitButtons{
 
-/* ==========================
-   Focus Styles
-========================== */
+        justify-content:space-between;
 
-button:focus-visible,
-input:focus-visible{
+    }
 
-    outline:3px solid rgba(79,70,229,.3);
+    .completeButton,
+    .deleteButton{
 
-    outline-offset:3px;
+        flex:1;
 
-}
+        height:50px;
 
-/* ==========================
-   Selection
-========================== */
-
-::selection{
-
-    background:var(--primary);
-
-    color:white;
+    }
 
 }
 
-/* ==========================
-   End of File
-========================== */
+/* ==========================================================
+   EXTRA SMALL DEVICES (360px)
+   ========================================================== */
+
+@media (max-width:360px){
+
+    h1{
+
+        font-size:1.1rem;
+
+    }
+
+    h2{
+
+        font-size:1.15rem;
+
+    }
+
+    .logo{
+
+        gap:10px;
+
+    }
+
+    .logoCircle{
+
+        width:40px;
+        height:40px;
+
+    }
+
+    .themeButton{
+
+        width:40px;
+        height:40px;
+
+    }
+
+    .badge{
+
+        width:100%;
+
+        justify-content:center;
+
+    }
+
+}
+
+/* ==========================================================
+   TOUCH DEVICES
+   ========================================================== */
+
+@media (hover:none){
+
+    .habit:hover,
+    .card:hover,
+    .addHabit:hover,
+    .themeButton:hover{
+
+        transform:none;
+
+        box-shadow:var(--shadow);
+
+    }
+
+    .completeButton,
+    .deleteButton,
+    .themeButton,
+    .addButton{
+
+        min-height:48px;
+
+    }
+
+}
+
+/* ==========================================================
+   LANDSCAPE PHONE
+   ========================================================== */
+
+@media (max-height:500px){
+
+    header{
+
+        margin-bottom:24px;
+
+    }
+
+    .hero{
+
+        gap:14px;
+
+    }
+
+}
+
+/* ==========================================================
+   IMAGE SAFETY
+   ========================================================== */
+
+img{
+
+    max-width:100%;
+
+    display:block;
+
+}
+
+/* ==========================================================
+   LINKS
+   ========================================================== */
+
+a{
+
+    color:inherit;
+
+    text-decoration:none;
+
+}
+
+/* ==========================================================
+   DISABLE HORIZONTAL SCROLL
+   ========================================================== */
+
+html,
+body{
+
+    overflow-x:hidden;
+
+}
+
+/* ==========================================================
+   FINAL POLISH
+   ========================================================== */
+
+.habit,
+.card,
+.addHabit{
+
+    overflow:hidden;
+
+}
+
+button{
+
+    cursor:pointer;
+
+}
+
+input{
+
+    min-width:0;
+
+}
+
+/* ==========================================================
+   END OF DAY 3
+   ========================================================== */
