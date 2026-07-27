@@ -1,26 +1,48 @@
-/* ==========================================
-   Habit Tracker
-   Day 3
-========================================== */
+/* ==========================================================
+   HABIT TRACKER
+   Day 5
+   app.js
+   Part 1 / 4
+========================================================== */
 
 "use strict";
 
-/* ==========================================
-   Configuration
-========================================== */
+/* ==========================================================
+   STORAGE
+========================================================== */
 
 const STORAGE_KEY = "habit_tracker_data";
 const THEME_KEY = "habit_tracker_theme";
 
-/* ==========================================
-   Application Data
-========================================== */
+/* ==========================================================
+   CATEGORIES
+========================================================== */
+
+const CATEGORIES = [
+
+    "General",
+    "Health",
+    "Fitness",
+    "School",
+    "Work",
+    "Reading",
+    "Personal"
+
+];
+
+/* ==========================================================
+   APP STATE
+========================================================== */
 
 let habits = [];
 
-/* ==========================================
-   DOM Elements
-========================================== */
+let currentSearch = "";
+
+let currentSort = "favorite";
+
+/* ==========================================================
+   DOM ELEMENTS
+========================================================== */
 
 const habitInput =
     document.getElementById("habitInput");
@@ -49,60 +71,41 @@ const progressBar =
 const themeButton =
     document.getElementById("themeButton");
 
-/* ==========================================
-   Date Helpers
-========================================== */
+/* ==========================================================
+   DATE HELPERS
+========================================================== */
 
-function getTodayString(){
+function todayKey(){
 
-    const today = new Date();
+    const d = new Date();
 
-    const year = today.getFullYear();
+    return [
 
-    const month = String(
-        today.getMonth()+1
-    ).padStart(2,"0");
+        d.getFullYear(),
 
-    const day = String(
-        today.getDate()
-    ).padStart(2,"0");
+        String(d.getMonth()+1)
+            .padStart(2,"0"),
 
-    return `${year}-${month}-${day}`;
+        String(d.getDate())
+            .padStart(2,"0")
+
+    ].join("-");
+
+}
+
+function daysBetween(a,b){
+
+    return Math.round(
+
+        (b-a)/86400000
+
+    );
 
 }
 
-/* ==========================================
-   Storage
-========================================== */
-
-function loadHabits(){
-
-    const saved =
-        localStorage.getItem(
-            STORAGE_KEY
-        );
-
-    if(!saved){
-
-        habits = [];
-
-        return;
-
-    }
-
-    try{
-
-        habits = JSON.parse(saved);
-
-    }
-
-    catch{
-
-        habits = [];
-
-    }
-
-}
+/* ==========================================================
+   STORAGE
+========================================================== */
 
 function saveHabits(){
 
@@ -116,28 +119,115 @@ function saveHabits(){
 
 }
 
-/* ==========================================
-   Upgrade Older Saves
-========================================== */
+function loadHabits(){
+
+    const data =
+
+        localStorage.getItem(STORAGE_KEY);
+
+    if(!data){
+
+        habits=[];
+
+        return;
+
+    }
+
+    try{
+
+        habits=JSON.parse(data);
+
+    }
+
+    catch{
+
+        habits=[];
+
+    }
+
+}
+
+/* ==========================================================
+   CREATE HABIT
+========================================================== */
+
+function createHabit(name){
+
+    return{
+
+        id:
+
+            Date.now()+
+
+            Math.floor(
+
+                Math.random()*100000
+
+            ),
+
+        name:name,
+
+        category:"General",
+
+        favorite:false,
+
+        notes:"",
+
+        created:Date.now(),
+
+        history:{},
+
+        streak:0,
+
+        longestStreak:0,
+
+        totalCompletions:0
+
+    };
+
+}
+
+/* ==========================================================
+   UPGRADE OLD SAVES
+========================================================== */
 
 function upgradeHabitData(){
 
     habits.forEach(habit=>{
 
-        if(typeof habit.name!=="string"){
+        if(!habit.id){
 
-            habit.name="New Habit";
+            habit.id=
+
+                Date.now()+
+
+                Math.floor(
+
+                    Math.random()*100000
+
+                );
 
         }
 
-        if(typeof habit.created!=="number"){
+        if(typeof habit.category!=="string"){
 
-            habit.created=Date.now();
+            habit.category="General";
 
         }
 
-        if(typeof habit.history!=="object"
-            || habit.history===null){
+        if(typeof habit.favorite!=="boolean"){
+
+            habit.favorite=false;
+
+        }
+
+        if(typeof habit.notes!=="string"){
+
+            habit.notes="";
+
+        }
+
+        if(typeof habit.history!=="object"){
 
             habit.history={};
 
@@ -149,40 +239,41 @@ function upgradeHabitData(){
 
         }
 
+        if(typeof habit.longestStreak!=="number"){
+
+            habit.longestStreak=0;
+
+        }
+
+        if(typeof habit.totalCompletions!=="number"){
+
+            habit.totalCompletions=0;
+
+        }
+
     });
 
 }
 
-/* ==========================================
-   Theme
-========================================== */
+/* ==========================================================
+   THEME
+========================================================== */
 
 function loadTheme(){
 
-    const theme =
-        localStorage.getItem(
-            THEME_KEY
-        );
+    const theme=
+
+        localStorage.getItem(THEME_KEY);
 
     if(theme==="dark"){
 
-        document.body.classList.add(
-            "dark"
-        );
-
-        themeButton.innerHTML =
-        '<i class="fa-solid fa-sun"></i>';
+        document.body.classList.add("dark");
 
     }
 
     else{
 
-        document.body.classList.remove(
-            "dark"
-        );
-
-        themeButton.innerHTML =
-        '<i class="fa-solid fa-moon"></i>';
+        document.body.classList.remove("dark");
 
     }
 
@@ -190,52 +281,193 @@ function loadTheme(){
 
 function toggleTheme(){
 
-    document.body.classList.toggle(
-        "dark"
-    );
-
-    const dark =
-        document.body.classList.contains(
-            "dark"
-        );
+    document.body.classList.toggle("dark");
 
     localStorage.setItem(
 
         THEME_KEY,
 
-        dark
+        document.body.classList.contains("dark")
+
         ? "dark"
+
         : "light"
 
     );
 
-    themeButton.innerHTML = dark
+}
 
-        ? '<i class="fa-solid fa-sun"></i>'
+/* ==========================================================
+   SEARCH
+========================================================== */
 
-        : '<i class="fa-solid fa-moon"></i>';
+function searchHabits(){
+
+    if(currentSearch===""){
+
+        return habits;
+
+    }
+
+    return habits.filter(habit=>{
+
+        const search=
+
+            currentSearch.toLowerCase();
+
+        return(
+
+            habit.name
+
+                .toLowerCase()
+
+                .includes(search)
+
+            ||
+
+            habit.category
+
+                .toLowerCase()
+
+                .includes(search)
+
+        );
+
+    });
 
 }
 
-/* ==========================================
-   History System
-========================================== */
+/* ==========================================================
+   SORT
+========================================================== */
 
-function isCompletedToday(habit){
+function sortHabits(list){
 
-    const today = getTodayString();
+    const sorted=[...list];
 
-    return habit.history[today] === true;
+    switch(currentSort){
+
+        case "favorite":
+
+            sorted.sort((a,b)=>{
+
+                if(a.favorite===b.favorite){
+
+                    return 0;
+
+                }
+
+                return a.favorite ? -1 : 1;
+
+            });
+
+            break;
+
+        case "alphabetical":
+
+            sorted.sort((a,b)=>
+
+                a.name.localeCompare(b.name)
+
+            );
+
+            break;
+
+        case "streak":
+
+            sorted.sort((a,b)=>
+
+                b.streak-a.streak
+
+            );
+
+            break;
+
+        case "completed":
+
+            sorted.sort((a,b)=>
+
+                b.totalCompletions-
+
+                a.totalCompletions
+
+            );
+
+            break;
+
+        case "newest":
+
+            sorted.sort((a,b)=>
+
+                b.created-a.created
+
+            );
+
+            break;
+
+        case "oldest":
+
+            sorted.sort((a,b)=>
+
+                a.created-b.created
+
+            );
+
+            break;
+
+    }
+
+    return sorted;
 
 }
+
+function visibleHabits(){
+
+    return sortHabits(
+
+        searchHabits()
+
+    );
+
+}
+
+/* ==========================================================
+   DAY 5
+   app.js
+   Part 2 / 4
+========================================================== */
+
+/* ==========================================================
+   HISTORY HELPERS
+========================================================== */
+
+function completionDates(habit){
+
+    return Object.keys(habit.history)
+
+        .filter(date=>habit.history[date])
+
+        .sort();
+
+}
+
+function completedToday(habit){
+
+    return habit.history[todayKey()]===true;
+
+}
+
+/* ==========================================================
+   COMPLETE HABIT
+========================================================== */
 
 function toggleHabit(index){
 
-    const habit = habits[index];
+    const habit=visibleHabits()[index];
 
-    const today = getTodayString();
+    const today=todayKey();
 
-    if(isCompletedToday(habit)){
+    if(habit.history[today]){
 
         delete habit.history[today];
 
@@ -243,35 +475,39 @@ function toggleHabit(index){
 
     else{
 
-        habit.history[today] = true;
+        habit.history[today]=true;
 
     }
+
+    refreshHabit(habit);
 
     renderHabits();
 
 }
 
-/* ==========================================
-   Streak Calculation
-========================================== */
+/* ==========================================================
+   CURRENT STREAK
+========================================================== */
 
-function calculateStreak(habit){
+function calculateCurrentStreak(habit){
 
-    let streak = 0;
+    let streak=0;
 
-    const date = new Date();
+    const date=new Date();
 
     while(true){
 
-        const key =
+        const key=[
 
-            date.getFullYear() + "-" +
+            date.getFullYear(),
 
             String(date.getMonth()+1)
-            .padStart(2,"0") + "-" +
+            .padStart(2,"0"),
 
             String(date.getDate())
-            .padStart(2,"0");
+            .padStart(2,"0")
+
+        ].join("-");
 
         if(habit.history[key]){
 
@@ -297,17 +533,107 @@ function calculateStreak(habit){
 
 }
 
-/* ==========================================
-   Weekly Statistics
-========================================== */
+/* ==========================================================
+   LONGEST STREAK
+========================================================== */
 
-function getWeeklyCompletion(habit){
+function calculateLongestStreak(habit){
 
-    let completed = 0;
+    const dates=completionDates(habit);
+
+    if(dates.length===0){
+
+        return 0;
+
+    }
+
+    let best=1;
+
+    let current=1;
+
+    for(let i=1;i<dates.length;i++){
+
+        const previous=new Date(dates[i-1]);
+
+        const next=new Date(dates[i]);
+
+        if(daysBetween(previous,next)===1){
+
+            current++;
+
+        }
+
+        else{
+
+            current=1;
+
+        }
+
+        if(current>best){
+
+            best=current;
+
+        }
+
+    }
+
+    return best;
+
+}
+
+/* ==========================================================
+   TOTAL COMPLETIONS
+========================================================== */
+
+function calculateTotalCompletions(habit){
+
+    return completionDates(habit).length;
+
+}
+
+/* ==========================================================
+   COMPLETION RATE
+========================================================== */
+
+function calculateCompletionRate(habit){
+
+    const totalDays=Math.max(
+
+        1,
+
+        Math.floor(
+
+            (Date.now()-habit.created)
+
+            /86400000
+
+        )+1
+
+    );
+
+    return Math.round(
+
+        habit.totalCompletions
+
+        /totalDays
+
+        *100
+
+    );
+
+}
+
+/* ==========================================================
+   WEEKLY COMPLETION
+========================================================== */
+
+function weeklyCompletion(habit){
+
+    let completed=0;
 
     for(let i=0;i<7;i++){
 
-        const date = new Date();
+        const date=new Date();
 
         date.setDate(
 
@@ -315,15 +641,17 @@ function getWeeklyCompletion(habit){
 
         );
 
-        const key =
+        const key=[
 
-            date.getFullYear()+"-"+
+            date.getFullYear(),
 
             String(date.getMonth()+1)
-            .padStart(2,"0")+"-"+
+            .padStart(2,"0"),
 
             String(date.getDate())
-            .padStart(2,"0");
+            .padStart(2,"0")
+
+        ].join("-");
 
         if(habit.history[key]){
 
@@ -337,15 +665,13 @@ function getWeeklyCompletion(habit){
 
 }
 
-/* ==========================================
-   Last Completed
-========================================== */
+/* ==========================================================
+   LAST COMPLETED
+========================================================== */
 
-function getLastCompleted(habit){
+function lastCompleted(habit){
 
-    const dates =
-
-        Object.keys(habit.history);
+    const dates=completionDates(habit);
 
     if(dates.length===0){
 
@@ -353,13 +679,11 @@ function getLastCompleted(habit){
 
     }
 
-    dates.sort();
+    const latest=
 
-    const latest = dates[dates.length-1];
+        dates[dates.length-1];
 
-    const today = getTodayString();
-
-    if(latest===today){
+    if(latest===todayKey()){
 
         return "Today";
 
@@ -369,81 +693,177 @@ function getLastCompleted(habit){
 
 }
 
-/* ==========================================
-   Progress
-========================================== */
+/* ==========================================================
+   REFRESH STATS
+========================================================== */
 
-function updateProgress(){
+function refreshHabit(habit){
 
-    if(habits.length===0){
+    habit.streak=
 
-        completedToday.textContent="0%";
+        calculateCurrentStreak(habit);
 
-        if(progressBar){
+    habit.longestStreak=
 
-            progressBar.style.width="0%";
+        calculateLongestStreak(habit);
 
-        }
+    habit.totalCompletions=
+
+        calculateTotalCompletions(habit);
+
+}
+
+function refreshAllHabits(){
+
+    habits.forEach(refreshHabit);
+
+}
+
+/* ==========================================================
+   FAVORITES
+========================================================== */
+
+function toggleFavorite(index){
+
+    const habit=
+
+        visible+Habits()[index];
+
+    habit.favorite=
+
+        !habit.favorite;
+
+    renderHabits();
+
+}
+
+/* ==========================================================
+   RENAME
+========================================================== */
+
+function renameHabit(index){
+
+    const habit=
+
+        visibleHabits()[index];
+
+    const value=prompt(
+
+        "Rename Habit",
+
+        habit.name
+
+    );
+
+    if(value===null){
 
         return;
 
     }
 
-    const completed = habits.filter(
+    const name=value.trim();
 
-        habit=>isCompletedToday(habit)
+    if(name===""){
 
-    ).length;
-
-    const percent = Math.round(
-
-        completed/habits.length*100
-
-    );
-
-    completedToday.textContent=
-
-        percent+"%";
-
-    if(progressBar){
-
-        progressBar.style.width=
-
-            percent+"%";
+        return;
 
     }
 
-}
+    habit.name=name;
 
-/* ==========================================
-   Counters
-========================================== */
-
-function updateCounters(){
-
-    habitTotal.textContent = habits.length;
-
-    habitCount.textContent =
-
-        habits.length +
-
-        (habits.length===1
-
-            ? " Habit"
-
-            : " Habits");
+    renderHabits();
 
 }
 
-/* ==========================================
-   Habit Card
-========================================== */
+/* ==========================================================
+   NOTES
+========================================================== */
+
+function editNotes(index){
+
+    const habit=
+
+        visibleHabits()[index];
+
+    const value=prompt(
+
+        "Notes",
+
+        habit.notes
+
+    );
+
+    if(value===null){
+
+        return;
+
+    }
+
+    habit.notes=value;
+
+    saveHabits();
+
+}
+
+/* ==========================================================
+   CATEGORY
+========================================================== */
+
+function changeCategory(index){
+
+    const habit=
+
+        visibleHabits()[index];
+
+    const value=prompt(
+
+        "Category:\n"+
+
+        CATEGORIES.join(", "),
+
+        habit.category
+
+    );
+
+    if(value===null){
+
+        return;
+
+    }
+
+    const category=value.trim();
+
+    if(category===""){
+
+        return;
+
+    }
+
+    habit.category=category;
+
+    renderHabits();
+
+}
+
+/* ==========================================================
+   DAY 5
+   app.js
+   Part 3 / 4
+========================================================== */
+
+/* ==========================================================
+   HABIT CARD
+========================================================== */
 
 function createHabitCard(habit,index){
 
     const card = document.createElement("div");
 
-    card.className = "habit";
+    card.className = "habit fadeIn";
+
+    const rate = calculateCompletionRate(habit);
+
+    const weekly = weeklyCompletion(habit);
 
     card.innerHTML = `
 
@@ -451,9 +871,27 @@ function createHabitCard(habit,index){
 
             <div class="habitLeft">
 
-                <div class="habitName">
+                <div class="habitTitleRow">
 
-                    ${habit.name}
+                    <div class="habitName">
+
+                        ${
+                            habit.favorite
+                            ? '<i class="fa-solid fa-star favoriteIcon"></i>'
+                            : ''
+                        }
+
+                        ${habit.name}
+
+                    </div>
+
+                    <span class="categoryBadge">
+
+                        <i class="fa-solid fa-tag"></i>
+
+                        ${habit.category}
+
+                    </span>
 
                 </div>
 
@@ -463,15 +901,39 @@ function createHabitCard(habit,index){
 
                         <i class="fa-solid fa-fire"></i>
 
-                        ${habit.streak} Day${habit.streak===1?"":"s"}
+                        ${habit.streak}
 
                     </span>
 
                     <span class="badge">
 
-                        <i class="fa-solid fa-chart-column"></i>
+                        <i class="fa-solid fa-trophy"></i>
 
-                        ${getWeeklyCompletion(habit)}/7 Week
+                        ${habit.longestStreak}
+
+                    </span>
+
+                    <span class="badge">
+
+                        <i class="fa-solid fa-calendar-week"></i>
+
+                        ${weekly}/7
+
+                    </span>
+
+                    <span class="badge">
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                        ${rate}%
+
+                    </span>
+
+                    <span class="badge">
+
+                        <i class="fa-solid fa-check-double"></i>
+
+                        ${habit.totalCompletions}
 
                     </span>
 
@@ -479,35 +941,98 @@ function createHabitCard(habit,index){
 
                 <div class="lastCompleted">
 
+                    <i class="fa-regular fa-clock"></i>
+
                     Last Completed:
 
                     <strong>
 
-                        ${getLastCompleted(habit)}
+                        ${lastCompleted(habit)}
 
                     </strong>
 
                 </div>
+
+                ${
+                    habit.notes.trim() !== ""
+
+                    ?
+
+                    `<div class="habitNotes">
+
+                        <i class="fa-solid fa-note-sticky"></i>
+
+                        ${habit.notes}
+
+                    </div>`
+
+                    :
+
+                    ""
+
+                }
 
             </div>
 
             <div class="habitButtons">
 
                 <button
+                    class="favoriteButton"
+                    data-index="${index}"
+                    title="Favorite">
 
-                    class="completeButton ${isCompletedToday(habit) ? "completed" : ""}"
+                    <i class="${
+                        habit.favorite
+                        ? "fa-solid fa-star"
+                        : "fa-regular fa-star"
+                    }"></i>
 
-                    data-index="${index}">
+                </button>
+
+                <button
+                    class="editButton"
+                    data-index="${index}"
+                    title="Rename">
+
+                    <i class="fa-solid fa-pen"></i>
+
+                </button>
+
+                <button
+                    class="notesButton"
+                    data-index="${index}"
+                    title="Notes">
+
+                    <i class="fa-solid fa-note-sticky"></i>
+
+                </button>
+
+                <button
+                    class="categoryButton"
+                    data-index="${index}"
+                    title="Category">
+
+                    <i class="fa-solid fa-tag"></i>
+
+                </button>
+
+                <button
+                    class="completeButton ${
+                        completedToday(habit)
+                        ? "completed"
+                        : ""
+                    }"
+                    data-index="${index}"
+                    title="Complete">
 
                     <i class="fa-solid fa-check"></i>
 
                 </button>
 
                 <button
-
                     class="deleteButton"
-
-                    data-index="${index}">
+                    data-index="${index}"
+                    title="Delete">
 
                     <i class="fa-solid fa-trash"></i>
 
@@ -523,53 +1048,33 @@ function createHabitCard(habit,index){
 
 }
 
-/* ==========================================
-   Rendering
-========================================== */
+/* ==========================================================
+   RENDER
+========================================================== */
 
 function renderHabits(){
 
-    habitList.innerHTML="";
+    habitList.innerHTML = "";
 
-    if(habits.length===0){
+    refreshAllHabits();
 
-        emptyState.classList.remove(
+    const list = visibleHabits();
 
-            "hidden"
+    if(list.length === 0){
 
-        );
+        emptyState.classList.remove("hidden");
 
-    }
+    }else{
 
-    else{
-
-        emptyState.classList.add(
-
-            "hidden"
-
-        );
+        emptyState.classList.add("hidden");
 
     }
 
-    habits.forEach(habit=>{
-
-        habit.streak =
-
-            calculateStreak(habit);
-
-    });
-
-    habits.forEach((habit,index)=>{
+    list.forEach((habit,index)=>{
 
         habitList.appendChild(
 
-            createHabitCard(
-
-                habit,
-
-                index
-
-            )
+            createHabitCard(habit,index)
 
         );
 
@@ -585,127 +1090,277 @@ function renderHabits(){
 
 }
 
-/* ==========================================
-   Add Habit
-========================================== */
+/* ==========================================================
+   ADD HABIT
+========================================================== */
 
 function addHabit(){
 
-    const name =
+    const name = habitInput.value.trim();
 
-        habitInput.value.trim();
+    if(name === ""){
 
-    if(name===""){
-
-        alert(
-
-            "Please enter a habit."
-
-        );
+        alert("Please enter a habit.");
 
         return;
 
     }
 
-    habits.push({
+    habits.push(
 
-        name:name,
+        createHabit(name)
 
-        created:Date.now(),
+    );
 
-        history:{},
-
-        streak:0
-
-    });
-
-    habitInput.value="";
+    habitInput.value = "";
 
     renderHabits();
 
 }
 
-/* ==========================================
-   Delete Habit
-========================================== */
+/* ==========================================================
+   DELETE HABIT
+========================================================== */
 
 function deleteHabit(index){
 
-    if(!confirm(
+    const habit = visibleHabits()[index];
 
-        "Delete this habit?"
-
-    )){
+    if(!confirm(`Delete "${habit.name}"?`)){
 
         return;
 
     }
 
-    habits.splice(index,1);
+    habits = habits.filter(
+
+        h => h.id !== habit.id
+
+    );
 
     renderHabits();
 
 }
 
-/* ==========================================
-   Button Events
-========================================== */
+/* ==========================================================
+   COUNTERS
+========================================================== */
 
-function attachEvents(){
+function updateCounters(){
 
-    document
-        .querySelectorAll(".completeButton")
-        .forEach(button=>{
+    habitTotal.textContent = habits.length;
 
-            button.addEventListener(
+    habitCount.textContent =
 
-                "click",
+        habits.length +
 
-                ()=>{
+        (habits.length === 1
 
-                    toggleHabit(
+            ? " Habit"
 
-                        Number(
-                            button.dataset.index
-                        )
-
-                    );
-
-                }
-
-            );
-
-        });
-
-    document
-        .querySelectorAll(".deleteButton")
-        .forEach(button=>{
-
-            button.addEventListener(
-
-                "click",
-
-                ()=>{
-
-                    deleteHabit(
-
-                        Number(
-                            button.dataset.index
-                        )
-
-                    );
-
-                }
-
-            );
-
-        });
+            : " Habits");
 
 }
 
-/* ==========================================
-   Input Events
-========================================== */
+/* ==========================================================
+   PROGRESS
+========================================================== */
+
+function updateProgress(){
+
+    if(habits.length === 0){
+
+        completedToday.textContent = "0%";
+
+        if(progressBar){
+
+            progressBar.style.width = "0%";
+
+        }
+
+        return;
+
+    }
+
+    const completed = habits.filter(
+
+        completedToday
+
+    ).length;
+
+    const percent = Math.round(
+
+        completed /
+
+        habits.length *
+
+        100
+
+    );
+
+    completedToday.textContent = percent + "%";
+
+    if(progressBar){
+
+        progressBar.style.width = percent + "%";
+
+    }
+
+}
+
+/* ==========================================================
+   DAY 5
+   app.js
+   Part 4 / 4
+========================================================== */
+
+/* ==========================================================
+   EVENT LISTENERS
+========================================================== */
+
+function attachEvents(){
+
+    document.querySelectorAll(".completeButton").forEach(button=>{
+
+        button.onclick=()=>{
+
+            toggleHabit(
+
+                Number(button.dataset.index)
+
+            );
+
+        };
+
+    });
+
+    document.querySelectorAll(".deleteButton").forEach(button=>{
+
+        button.onclick=()=>{
+
+            deleteHabit(
+
+                Number(button.dataset.index)
+
+            );
+
+        };
+
+    });
+
+    document.querySelectorAll(".favoriteButton").forEach(button=>{
+
+        button.onclick=()=>{
+
+            toggleFavorite(
+
+                Number(button.dataset.index)
+
+            );
+
+        };
+
+    });
+
+    document.querySelectorAll(".editButton").forEach(button=>{
+
+        button.onclick=()=>{
+
+            renameHabit(
+
+                Number(button.dataset.index)
+
+            );
+
+        };
+
+    });
+
+    document.querySelectorAll(".notesButton").forEach(button=>{
+
+        button.onclick=()=>{
+
+            editNotes(
+
+                Number(button.dataset.index)
+
+            );
+
+        };
+
+    });
+
+    document.querySelectorAll(".categoryButton").forEach(button=>{
+
+        button.onclick=()=>{
+
+            changeCategory(
+
+                Number(button.dataset.index)
+
+            );
+
+        };
+
+    });
+
+}
+
+/* ==========================================================
+   SEARCH
+========================================================== */
+
+const searchInput =
+
+    document.getElementById("searchInput");
+
+if(searchInput){
+
+    searchInput.addEventListener(
+
+        "input",
+
+        function(){
+
+            currentSearch=this.value;
+
+            renderHabits();
+
+        }
+
+    );
+
+}
+
+/* ==========================================================
+   SORT
+========================================================== */
+
+const sortSelect =
+
+    document.getElementById("sortSelect");
+
+if(sortSelect){
+
+    sortSelect.addEventListener(
+
+        "change",
+
+        function(){
+
+            currentSort=this.value;
+
+            renderHabits();
+
+        }
+
+    );
+
+}
+
+/* ==========================================================
+   INPUT EVENTS
+========================================================== */
 
 addButton.addEventListener(
 
@@ -739,29 +1394,23 @@ themeButton.addEventListener(
 
 );
 
-/* ==========================================
-   Daily Maintenance
-========================================== */
+/* ==========================================================
+   CLEANUP
+========================================================== */
 
 function cleanupHistory(){
 
-    const cutoff = new Date();
+    const cutoff=new Date();
 
-    cutoff.setDate(
+    cutoff.setFullYear(
 
-        cutoff.getDate()-365
+        cutoff.getFullYear()-2
 
     );
 
-    const cutoffKey =
+    const cutoffDate=cutoff.toISOString()
 
-        cutoff.getFullYear()+"-"+
-
-        String(cutoff.getMonth()+1)
-        .padStart(2,"0")+"-"+
-
-        String(cutoff.getDate())
-        .padStart(2,"0");
+        .split("T")[0];
 
     habits.forEach(habit=>{
 
@@ -769,7 +1418,7 @@ function cleanupHistory(){
 
         .forEach(date=>{
 
-            if(date < cutoffKey){
+            if(date<cutoffDate){
 
                 delete habit.history[date];
 
@@ -781,9 +1430,21 @@ function cleanupHistory(){
 
 }
 
-/* ==========================================
-   Initialization
-========================================== */
+/* ==========================================================
+   SAVE BEFORE EXIT
+========================================================== */
+
+window.addEventListener(
+
+    "beforeunload",
+
+    saveHabits
+
+);
+
+/* ==========================================================
+   INITIALIZE
+========================================================== */
 
 function initialize(){
 
@@ -793,14 +1454,16 @@ function initialize(){
 
     cleanupHistory();
 
+    refreshAllHabits();
+
     loadTheme();
 
     renderHabits();
 
 }
 
-/* ==========================================
-   Start App
-========================================== */
+/* ==========================================================
+   START APP
+========================================================== */
 
 initialize();
