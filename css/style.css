@@ -1,16 +1,8 @@
 /* ==========================================================
-   HABIT TRACKER
-   Day 3
-   Part 1
-   ========================================================== */
-
-/* ==========================================================
    RESET
-   ========================================================== */
+========================================================== */
 
-*,
-*::before,
-*::after{
+*{
     margin:0;
     padding:0;
     box-sizing:border-box;
@@ -28,64 +20,59 @@ body{
 
     color:#1f2937;
 
-    min-height:100vh;
-
-    line-height:1.5;
-
-    transition:
-        background .3s,
-        color .3s;
+    transition:.3s;
 
 }
 
 /* ==========================================================
    VARIABLES
-   ========================================================== */
+========================================================== */
 
 :root{
 
-    --primary:#4f46e5;
-    --primary-dark:#4338ca;
+    --primary:#2563eb;
+
+    --primaryDark:#1d4ed8;
 
     --green:#22c55e;
+
     --red:#ef4444;
 
-    --white:#ffffff;
+    --yellow:#f59e0b;
 
     --background:#f4f7fb;
 
     --card:#ffffff;
 
-    --border:#e5e7eb;
+    --border:#dbe3ef;
 
     --text:#1f2937;
 
-    --muted:#6b7280;
+    --textLight:#6b7280;
 
     --shadow:
-        0 10px 30px rgba(0,0,0,.08);
 
-    --radius:18px;
+        0 8px 30px
 
-    --transition:.25s ease;
+        rgba(0,0,0,.08);
 
 }
 
 /* ==========================================================
    DARK MODE
-   ========================================================== */
+========================================================== */
 
 body.dark{
 
-    --background:#111827;
+    --background:#121826;
 
-    --card:#1f2937;
+    --card:#1d2433;
 
-    --border:#374151;
+    --border:#2f3c53;
 
     --text:#f3f4f6;
 
-    --muted:#9ca3af;
+    --textLight:#9ca3af;
 
     background:var(--background);
 
@@ -94,102 +81,40 @@ body.dark{
 }
 
 /* ==========================================================
-   TYPOGRAPHY
-   ========================================================== */
-
-h1{
-
-    font-size:2rem;
-
-    font-weight:700;
-
-}
-
-h2{
-
-    font-size:1.5rem;
-
-    font-weight:700;
-
-}
-
-h3{
-
-    font-size:1.2rem;
-
-    font-weight:600;
-
-}
-
-p{
-
-    color:var(--muted);
-
-}
-
-strong{
-
-    color:var(--text);
-
-}
-
-/* ==========================================================
-   LAYOUT
-   ========================================================== */
+   CONTAINER
+========================================================== */
 
 .container{
 
-    max-width:1200px;
+    max-width:1150px;
 
     margin:auto;
 
-    padding:32px;
-
-}
-
-header{
-
-    margin-bottom:40px;
-
-}
-
-main{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:28px;
-
-}
-
-footer{
-
-    margin-top:60px;
-
-    text-align:center;
-
-    color:var(--muted);
-
-    font-size:.95rem;
+    padding:35px;
 
 }
 
 /* ==========================================================
-   TOP BAR
-   ========================================================== */
+   HEADER
+========================================================== */
+
+header{
+
+    margin-bottom:35px;
+
+}
 
 .topBar{
 
     display:flex;
 
-    align-items:center;
-
     justify-content:space-between;
+
+    align-items:center;
 
     gap:20px;
 
-    margin-bottom:32px;
+    flex-wrap:wrap;
 
 }
 
@@ -201,19 +126,19 @@ footer{
 
     gap:18px;
 
-    flex:1;
-
-    min-width:0;
-
 }
 
 .logoCircle{
 
-    width:58px;
+    width:60px;
 
-    height:58px;
+    height:60px;
 
-    border-radius:50%;
+    border-radius:18px;
+
+    background:var(--primary);
+
+    color:white;
 
     display:flex;
 
@@ -221,33 +146,35 @@ footer{
 
     align-items:center;
 
-    background:var(--primary);
+    font-size:24px;
 
-    color:white;
-
-    font-size:1.5rem;
-
-    flex-shrink:0;
+    box-shadow:var(--shadow);
 
 }
 
-.logoText{
+.logoText h1{
 
-    min-width:0;
+    font-size:2rem;
+
+    margin-bottom:4px;
 
 }
 
 .logoText p{
 
-    margin-top:4px;
+    color:var(--textLight);
 
 }
 
+/* ==========================================================
+   THEME BUTTON
+========================================================== */
+
 .themeButton{
 
-    width:52px;
+    width:50px;
 
-    height:52px;
+    height:50px;
 
     border:none;
 
@@ -257,15 +184,13 @@ footer{
 
     color:var(--text);
 
-    font-size:1.2rem;
-
     cursor:pointer;
 
+    font-size:20px;
+
+    transition:.25s;
+
     box-shadow:var(--shadow);
-
-    transition:var(--transition);
-
-    flex-shrink:0;
 
 }
 
@@ -273,55 +198,68 @@ footer{
 
     transform:translateY(-2px);
 
-}
+    background:var(--primary);
 
-.themeButton:active{
-
-    transform:scale(.96);
+    color:white;
 
 }
 
 /* ==========================================================
    HERO
-   ========================================================== */
+========================================================== */
 
 .hero{
 
-    display:flex;
+    margin-top:30px;
 
-    justify-content:space-between;
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        #4f8cff
+    );
 
-    align-items:flex-start;
+    color:white;
 
-    gap:28px;
+    border-radius:24px;
+
+    padding:40px;
+
+    box-shadow:var(--shadow);
 
 }
 
-.heroLeft{
+.hero h2{
 
-    flex:1;
+    font-size:2rem;
+
+    margin-bottom:12px;
 
 }
 
-.heroLeft p{
-
-    margin-top:12px;
+.hero p{
 
     max-width:650px;
+
+    line-height:1.6;
+
+    opacity:.95;
 
 }
 
 /* ==========================================================
    SUMMARY
-   ========================================================== */
+========================================================== */
 
 .summary{
 
     display:grid;
 
-    grid-template-columns:repeat(2,170px);
+    grid-template-columns:
+        repeat(2,1fr);
 
-    gap:18px;
+    gap:20px;
+
+    margin-top:30px;
 
 }
 
@@ -331,99 +269,191 @@ footer{
 
     border:1px solid var(--border);
 
-    border-radius:var(--radius);
+    border-radius:20px;
 
-    padding:24px;
+    padding:30px;
+
+    text-align:center;
+
+    transition:.25s;
 
     box-shadow:var(--shadow);
-
-    transition:var(--transition);
 
 }
 
 .card:hover{
 
-    transform:translateY(-3px);
+    transform:translateY(-4px);
 
 }
 
 .card h3{
 
-    font-size:2rem;
+    font-size:2.2rem;
 
-    margin-bottom:6px;
+    color:var(--primary);
+
+    margin-bottom:10px;
 
 }
 
 .card span{
 
-    color:var(--muted);
-
-    font-size:.95rem;
+    color:var(--textLight);
 
 }
 
 /* ==========================================================
-   UTILITIES
-   ========================================================== */
+   PROGRESS BAR
+========================================================== */
 
-.hidden{
+.progressSection{
 
-    display:none !important;
-
-}
-
-.textMuted{
-
-    color:var(--muted);
+    margin-top:30px;
 
 }
 
-.fadeIn{
+.progress{
 
-    animation:fadeIn .35s ease;
+    width:100%;
+
+    height:16px;
+
+    background:var(--border);
+
+    border-radius:100px;
+
+    overflow:hidden;
 
 }
 
-@keyframes fadeIn{
+.progressBar{
 
-    from{
+    width:0%;
 
-        opacity:0;
-        transform:translateY(12px);
+    height:100%;
 
-    }
+    background:linear-gradient(
+        90deg,
+        #22c55e,
+        #16a34a
+    );
 
-    to{
-
-        opacity:1;
-        transform:translateY(0);
-
-    }
+    transition:width .45s;
 
 }
 
 /* ==========================================================
-   ADD HABIT SECTION
-   ========================================================== */
+   CONTROLS
+========================================================== */
 
-.addHabit{
+.controls{
+
+    display:flex;
+
+    gap:18px;
+
+    align-items:center;
+
+    margin-top:30px;
+
+    margin-bottom:30px;
+
+    flex-wrap:wrap;
+
+}
+
+.searchContainer{
+
+    flex:1;
+
+    min-width:260px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
 
     background:var(--card);
 
     border:1px solid var(--border);
 
-    border-radius:var(--radius);
+    border-radius:16px;
 
-    padding:28px;
+    padding:14px 18px;
 
     box-shadow:var(--shadow);
 
 }
 
-.addHabit h2{
+.searchContainer i{
 
-    margin-bottom:20px;
+    color:var(--textLight);
+
+    font-size:16px;
+
+}
+
+.searchContainer input{
+
+    flex:1;
+
+    border:none;
+
+    background:transparent;
+
+    color:var(--text);
+
+    font-size:16px;
+
+    outline:none;
+
+}
+
+.searchContainer input::placeholder{
+
+    color:var(--textLight);
+
+}
+
+#sortSelect{
+
+    min-width:190px;
+
+    padding:14px 18px;
+
+    border-radius:16px;
+
+    border:1px solid var(--border);
+
+    background:var(--card);
+
+    color:var(--text);
+
+    font-size:15px;
+
+    cursor:pointer;
+
+    box-shadow:var(--shadow);
+
+    transition:.25s;
+
+}
+
+#sortSelect:hover{
+
+    border-color:var(--primary);
+
+}
+
+/* ==========================================================
+   ADD HABIT
+========================================================== */
+
+.addHabit{
+
+    margin-bottom:35px;
 
 }
 
@@ -431,95 +461,91 @@ footer{
 
     display:flex;
 
-    gap:14px;
+    gap:15px;
 
     align-items:center;
 
 }
 
-.inputRow input{
+#habitInput{
 
     flex:1;
 
-    height:54px;
+    padding:16px 20px;
 
-    padding:0 18px;
+    border-radius:16px;
 
     border:1px solid var(--border);
 
-    border-radius:14px;
-
-    background:var(--background);
+    background:var(--card);
 
     color:var(--text);
 
-    font-size:1rem;
+    font-size:16px;
 
-    outline:none;
+    transition:.25s;
 
-    transition:var(--transition);
+    box-shadow:var(--shadow);
 
 }
 
-.inputRow input:focus{
+#habitInput:focus{
 
     border-color:var(--primary);
 
-    box-shadow:0 0 0 4px rgba(79,70,229,.15);
+    outline:none;
 
 }
 
-.inputRow input::placeholder{
+#habitInput::placeholder{
 
-    color:var(--muted);
+    color:var(--textLight);
 
 }
 
 .addButton{
 
-    height:54px;
-
-    padding:0 26px;
+    padding:16px 26px;
 
     border:none;
 
-    border-radius:14px;
+    border-radius:16px;
 
     background:var(--primary);
 
     color:white;
 
-    font-size:1rem;
+    cursor:pointer;
+
+    font-size:16px;
 
     font-weight:600;
 
-    cursor:pointer;
+    display:flex;
 
-    transition:var(--transition);
+    align-items:center;
 
-    white-space:nowrap;
+    gap:10px;
+
+    transition:.25s;
+
+    box-shadow:var(--shadow);
 
 }
 
 .addButton:hover{
 
-    background:var(--primary-dark);
+    background:var(--primaryDark);
 
     transform:translateY(-2px);
 
 }
 
-.addButton:active{
-
-    transform:scale(.97);
-
-}
-
 /* ==========================================================
-   SECTION TITLE
-   ========================================================== */
+   HABIT HEADER
+========================================================== */
 
-.sectionTitle{
+.habitHeaderRow{
 
     display:flex;
 
@@ -527,21 +553,129 @@ footer{
 
     align-items:center;
 
-    gap:20px;
+    margin-bottom:25px;
+
+    gap:15px;
 
 }
 
-.habitCount{
+.habitHeaderRow h2{
 
-    color:var(--muted);
+    font-size:1.6rem;
+
+}
+
+#habitCount{
+
+    color:var(--textLight);
 
     font-weight:600;
 
 }
 
 /* ==========================================================
+   GENERIC BUTTONS
+========================================================== */
+
+button{
+
+    font-family:inherit;
+
+}
+
+button:active{
+
+    transform:scale(.96);
+
+}
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+@media (max-width:900px){
+
+    .controls{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+    #sortSelect{
+
+        width:100%;
+
+    }
+
+    .inputRow{
+
+        flex-direction:column;
+
+    }
+
+    #habitInput{
+
+        width:100%;
+
+    }
+
+    .addButton{
+
+        width:100%;
+
+        justify-content:center;
+
+    }
+
+}
+
+@media (max-width:650px){
+
+    .container{
+
+        padding:18px;
+
+    }
+
+    .topBar{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+    .themeButton{
+
+        width:100%;
+
+    }
+
+    .summary{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .hero{
+
+        padding:28px;
+
+    }
+
+    .hero h2{
+
+        font-size:1.6rem;
+
+    }
+
+}
+
+/* ==========================================================
    HABIT LIST
-   ========================================================== */
+========================================================== */
 
 .habitList{
 
@@ -549,13 +683,13 @@ footer{
 
     flex-direction:column;
 
-    gap:18px;
+    gap:20px;
 
 }
 
 /* ==========================================================
    HABIT CARD
-   ========================================================== */
+========================================================== */
 
 .habit{
 
@@ -563,19 +697,21 @@ footer{
 
     border:1px solid var(--border);
 
-    border-radius:var(--radius);
+    border-radius:22px;
 
     padding:22px;
 
     box-shadow:var(--shadow);
 
-    transition:var(--transition);
+    transition:.25s;
 
 }
 
 .habit:hover{
 
     transform:translateY(-3px);
+
+    border-color:var(--primary);
 
 }
 
@@ -595,27 +731,73 @@ footer{
 
     flex:1;
 
-    min-width:0;
+}
+
+/* ==========================================================
+   TITLE
+========================================================== */
+
+.habitTitleRow{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    flex-wrap:wrap;
 
 }
 
 .habitName{
 
-    font-size:1.15rem;
+    font-size:1.3rem;
 
     font-weight:700;
 
-    color:var(--text);
+    display:flex;
 
-    overflow-wrap:anywhere;
+    align-items:center;
 
-    word-break:break-word;
+    gap:10px;
+
+}
+
+.favoriteIcon{
+
+    color:#FFD43B;
 
 }
 
 /* ==========================================================
-   BADGES
-   ========================================================== */
+   CATEGORY
+========================================================== */
+
+.categoryBadge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:7px 14px;
+
+    border-radius:100px;
+
+    background:rgba(37,99,235,.10);
+
+    color:var(--primary);
+
+    font-size:.82rem;
+
+    font-weight:600;
+
+}
+
+/* ==========================================================
+   INFO BADGES
+========================================================== */
 
 .habitInfo{
 
@@ -625,7 +807,7 @@ footer{
 
     gap:10px;
 
-    margin-top:12px;
+    margin-top:18px;
 
 }
 
@@ -635,88 +817,153 @@ footer{
 
     align-items:center;
 
-    gap:8px;
+    gap:7px;
 
-    padding:7px 12px;
+    padding:8px 14px;
 
     border-radius:999px;
 
-    background:rgba(79,70,229,.08);
+    background:var(--background);
 
-    color:var(--primary);
+    border:1px solid var(--border);
 
-    font-size:.88rem;
+    font-size:.85rem;
 
     font-weight:600;
 
 }
 
-.badge i{
+/* ==========================================================
+   LAST COMPLETED
+========================================================== */
+
+.lastCompleted{
+
+    margin-top:16px;
+
+    color:var(--textLight);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
 
     font-size:.9rem;
 
 }
 
 /* ==========================================================
-   LAST COMPLETED
-   ========================================================== */
+   NOTES
+========================================================== */
 
-.lastCompleted{
+.habitNotes{
 
-    margin-top:14px;
+    margin-top:18px;
 
-    font-size:.92rem;
+    padding:16px;
 
-    color:var(--muted);
+    border-radius:14px;
+
+    background:rgba(37,99,235,.06);
+
+    border-left:4px solid var(--primary);
+
+    line-height:1.5;
+
+    display:flex;
+
+    gap:10px;
 
 }
 
 /* ==========================================================
-   HABIT BUTTONS
-   ========================================================== */
+   BUTTONS
+========================================================== */
 
 .habitButtons{
 
-    display:flex;
+    display:grid;
 
-    gap:12px;
+    grid-template-columns:repeat(2,44px);
 
-    flex-shrink:0;
-
-    align-items:flex-start;
+    gap:10px;
 
 }
 
-.completeButton,
-.deleteButton{
+.habitButtons button{
 
-    width:48px;
+    width:44px;
 
-    height:48px;
+    height:44px;
 
     border:none;
 
-    border-radius:14px;
+    border-radius:12px;
 
     cursor:pointer;
 
-    font-size:1rem;
+    font-size:16px;
 
-    transition:var(--transition);
+    transition:.2s;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:var(--background);
+
+    color:var(--text);
 
 }
 
-.completeButton{
+.habitButtons button:hover{
 
-    background:#e8f8ef;
+    transform:translateY(-2px);
 
-    color:var(--green);
+}
+
+/* ==========================================================
+   INDIVIDUAL BUTTON COLORS
+========================================================== */
+
+.favoriteButton:hover{
+
+    background:#FFD43B;
+
+    color:white;
+
+}
+
+.renameButton:hover{
+
+    background:#3B82F6;
+
+    color:white;
+
+}
+
+.notesButton:hover{
+
+    background:#6366F1;
+
+    color:white;
+
+}
+
+.categoryButton:hover{
+
+    background:#8B5CF6;
+
+    color:white;
 
 }
 
 .completeButton:hover{
 
-    background:var(--green);
+    background:#22C55E;
 
     color:white;
 
@@ -724,221 +971,177 @@ footer{
 
 .completeButton.completed{
 
-    background:var(--green);
+    background:#22C55E;
 
     color:white;
-
-}
-
-.deleteButton{
-
-    background:#fdecec;
-
-    color:var(--red);
 
 }
 
 .deleteButton:hover{
 
-    background:var(--red);
+    background:#EF4444;
 
     color:white;
 
 }
 
-.completeButton:active,
-.deleteButton:active{
-
-    transform:scale(.95);
-
-}
-
-/* ==========================================================
-   PROGRESS BAR
-   ========================================================== */
-
-.progressContainer{
-
-    width:100%;
-
-    height:8px;
-
-    margin-top:14px;
-
-    border-radius:999px;
-
-    background:#e5e7eb;
-
-    overflow:hidden;
-
-}
-
-.progressBar{
-
-    width:0;
-
-    height:100%;
-
-    background:linear-gradient(
-        90deg,
-        #22c55e,
-        #16a34a
-    );
-
-    transition:width .35s ease;
-
-}
-
 /* ==========================================================
    EMPTY STATE
-   ========================================================== */
+========================================================== */
 
 .empty{
 
-    padding:70px 30px;
+    margin-top:60px;
 
     text-align:center;
 
+    padding:60px 20px;
+
     background:var(--card);
+
+    border-radius:24px;
 
     border:2px dashed var(--border);
 
-    border-radius:var(--radius);
+}
+
+.empty.hidden{
+
+    display:none;
 
 }
 
-.emptyIcon{
+.empty i{
 
-    font-size:4rem;
+    font-size:60px;
 
-    margin-bottom:18px;
+    color:var(--primary);
+
+    margin-bottom:20px;
 
 }
 
 .empty h3{
 
-    margin-bottom:10px;
+    font-size:1.5rem;
+
+    margin-bottom:12px;
 
 }
 
 .empty p{
 
+    color:var(--textLight);
+
     max-width:420px;
 
-    margin:0 auto;
+    margin:auto;
+
+    line-height:1.6;
 
 }
 
 /* ==========================================================
-   DESKTOP POLISH
-   ========================================================== */
+   ANIMATIONS
+========================================================== */
 
-button,
-input{
+.fadeIn{
 
-    font-family:inherit;
-
-}
-
-button{
-
-    user-select:none;
-
-    -webkit-tap-highlight-color:transparent;
+    animation:fadeIn .25s ease;
 
 }
 
-input{
+@keyframes fadeIn{
 
-    -webkit-appearance:none;
+    from{
 
-    appearance:none;
+        opacity:0;
 
-}
+        transform:translateY(10px);
 
-/* ==========================================================
-   HOVER EFFECTS
-   ========================================================== */
+    }
 
-.habit,
-.card,
-.addHabit{
+    to{
 
-    transition:
-        transform .25s ease,
-        box-shadow .25s ease,
-        border-color .25s ease,
-        background .25s ease;
+        opacity:1;
 
-}
+        transform:translateY(0);
 
-.habit:hover{
-
-    transform:translateY(-4px);
-
-    box-shadow:
-
-        0 18px 36px rgba(0,0,0,.10);
-
-}
-
-.card:hover{
-
-    transform:translateY(-4px);
-
-}
-
-.addHabit:hover{
-
-    border-color:rgba(79,70,229,.30);
-
-}
-
-.themeButton:hover{
-
-    box-shadow:
-
-        0 12px 28px rgba(0,0,0,.12);
+    }
 
 }
 
 /* ==========================================================
-   BUTTON ANIMATIONS
-   ========================================================== */
+   FOOTER
+========================================================== */
 
-.completeButton,
-.deleteButton,
-.addButton,
-.themeButton{
+footer{
 
-    transition:
+    margin-top:50px;
 
-        transform .18s ease,
+    padding:30px 20px;
 
-        background .25s ease,
+    text-align:center;
 
-        color .25s ease,
+    color:var(--textLight);
 
-        box-shadow .25s ease;
+    font-size:.95rem;
 
 }
 
-.completeButton:active,
-.deleteButton:active,
-.addButton:active,
-.themeButton:active{
+/* ==========================================================
+   LINKS
+========================================================== */
 
-    transform:scale(.94);
+a{
+
+    color:var(--primary);
+
+    text-decoration:none;
+
+    transition:.2s;
+
+}
+
+a:hover{
+
+    color:var(--primaryDark);
+
+}
+
+/* ==========================================================
+   FOCUS STATES
+========================================================== */
+
+button:focus,
+input:focus,
+select:focus{
+
+    outline:3px solid rgba(37,99,235,.25);
+
+    outline-offset:2px;
+
+}
+
+/* ==========================================================
+   SELECTION
+========================================================== */
+
+::selection{
+
+    background:var(--primary);
+
+    color:white;
 
 }
 
 /* ==========================================================
    SCROLLBAR
-   ========================================================== */
+========================================================== */
 
 ::-webkit-scrollbar{
 
-    width:12px;
+    width:10px;
 
 }
 
@@ -950,390 +1153,83 @@ input{
 
 ::-webkit-scrollbar-thumb{
 
-    background:#bfc6d3;
+    background:var(--border);
 
-    border-radius:999px;
+    border-radius:100px;
 
 }
 
 ::-webkit-scrollbar-thumb:hover{
 
-    background:#9ca3af;
-
-}
-
-/* Firefox */
-
-*{
-
-    scrollbar-width:thin;
+    background:var(--primary);
 
 }
 
 /* ==========================================================
-   DARK MODE
-   ========================================================== */
+   DARK MODE IMPROVEMENTS
+========================================================== */
 
-body.dark .card,
+body.dark .hero{
 
-body.dark .habit,
-
-body.dark .addHabit,
-
-body.dark .themeButton{
-
-    background:var(--card);
-
-}
-
-body.dark input{
-
-    background:#111827;
-
-    color:var(--text);
-
-    border-color:var(--border);
-
-}
-
-body.dark input::placeholder{
-
-    color:#9ca3af;
-
-}
-
-body.dark .progressContainer{
-
-    background:#374151;
+    background:linear-gradient(
+        135deg,
+        #1E40AF,
+        #2563EB
+    );
 
 }
 
 body.dark .badge{
 
-    background:
-
-        rgba(99,102,241,.18);
-
-    color:#c7d2fe;
+    background:#162032;
 
 }
 
-body.dark .completeButton{
+body.dark .habitNotes{
 
-    background:
-
-        rgba(34,197,94,.18);
-
-    color:#4ade80;
+    background:rgba(37,99,235,.12);
 
 }
 
-body.dark .completeButton.completed{
+body.dark .searchContainer{
 
-    background:#22c55e;
-
-    color:white;
+    background:var(--card);
 
 }
 
-body.dark .deleteButton{
+body.dark #habitInput{
 
-    background:
-
-        rgba(239,68,68,.18);
-
-    color:#f87171;
+    background:var(--card);
 
 }
 
-body.dark .empty{
+body.dark #sortSelect{
 
-    border-color:#374151;
+    background:var(--card);
 
 }
 
-body.dark .logoCircle{
+body.dark .habitButtons button{
 
-    background:
+    background:#162032;
 
-        linear-gradient(
+}
 
-            135deg,
+body.dark .progress{
 
-            #6366f1,
-
-            #4f46e5
-
-        );
+    background:#24324a;
 
 }
 
 /* ==========================================================
-   ACCESSIBILITY
-   ========================================================== */
+   LARGE TABLETS
+========================================================== */
 
-button:focus-visible,
-
-input:focus-visible{
-
-    outline:3px solid
-
-        rgba(79,70,229,.35);
-
-    outline-offset:3px;
-
-}
-
-/* ==========================================================
-   SELECTION
-   ========================================================== */
-
-::selection{
-
-    background:#6366f1;
-
-    color:white;
-
-}
-
-/* ==========================================================
-   SMOOTH TRANSITIONS
-   ========================================================== */
-
-body,
-
-.card,
-
-.habit,
-
-.addHabit,
-
-.themeButton,
-
-input,
-
-button{
-
-    transition:
-
-        background .25s ease,
-
-        color .25s ease,
-
-        border-color .25s ease,
-
-        box-shadow .25s ease;
-
-}
-
-/* ==========================================================
-   TABLET
-   ========================================================== */
-
-@media (max-width:1000px){
-
-    .container{
-
-        max-width:900px;
-
-        padding:24px;
-
-    }
-
-    .summary{
-
-        grid-template-columns:
-
-            repeat(2,1fr);
-
-    }
-
-    .hero{
-
-        flex-direction:column;
-
-        gap:24px;
-
-    }
-
-}
-
-/* ==========================================================
-   SMALL LAPTOPS
-   ========================================================== */
-
-@media (max-width:800px){
-
-    h1{
-
-        font-size:1.8rem;
-
-    }
-
-    h2{
-
-        font-size:1.35rem;
-
-    }
-
-    .container{
-
-        padding:20px;
-
-    }
-
-    .card{
-
-        padding:20px;
-
-    }
-
-    .habit{
-
-        padding:20px;
-
-    }
-
-}
-
-/* ==========================================================
-   MOBILE (768px)
-   ========================================================== */
-
-@media (max-width:768px){
-
-    .container{
-
-        padding:18px;
-
-    }
-
-    /* ---------- Header ---------- */
-
-    .topBar{
-
-        align-items:flex-start;
-
-        gap:16px;
-
-    }
-
-    .logo{
-
-        gap:12px;
-
-    }
-
-    .logoCircle{
-
-        width:50px;
-        height:50px;
-        font-size:1.2rem;
-
-    }
-
-    .logoText h1{
-
-        font-size:1.5rem;
-
-    }
-
-    .logoText p{
-
-        font-size:.85rem;
-
-    }
-
-    .themeButton{
-
-        width:48px;
-        height:48px;
-
-        flex-shrink:0;
-
-    }
-
-    /* ---------- Hero ---------- */
-
-    .hero{
-
-        flex-direction:column;
-
-        gap:20px;
-
-    }
-
-    .heroLeft{
-
-        width:100%;
-
-    }
-
-    .heroLeft p{
-
-        max-width:none;
-
-    }
-
-    .summary{
-
-        width:100%;
-
-        grid-template-columns:1fr 1fr;
-
-        gap:14px;
-
-    }
-
-    .card{
-
-        padding:18px;
-
-    }
-
-    .card h3{
-
-        font-size:1.6rem;
-
-    }
-
-    /* ---------- Add Habit ---------- */
-
-    .inputRow{
-
-        flex-direction:column;
-
-        align-items:stretch;
-
-    }
-
-    .inputRow input{
-
-        width:100%;
-
-    }
-
-    .addButton{
-
-        width:100%;
-
-    }
-
-    /* ---------- Habit Cards ---------- */
-
-    .habit{
-
-        padding:18px;
-
-    }
+@media (max-width:900px){
 
     .habitHeader{
 
         flex-direction:column;
-
-        align-items:flex-start;
-
-        gap:18px;
 
     }
 
@@ -1341,7 +1237,83 @@ button{
 
         width:100%;
 
-        justify-content:flex-end;
+        grid-template-columns:repeat(6,1fr);
+
+    }
+
+    .habitButtons button{
+
+        width:100%;
+
+    }
+
+}
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+@media (max-width:600px){
+
+    .logo{
+
+        flex-direction:column;
+
+        align-items:center;
+
+        text-align:center;
+
+    }
+
+    .logoText{
+
+        text-align:center;
+
+    }
+
+    .hero{
+
+        padding:22px;
+
+        text-align:center;
+
+    }
+
+    .hero h2{
+
+        font-size:1.5rem;
+
+    }
+
+    .hero p{
+
+        font-size:.95rem;
+
+    }
+
+    .card{
+
+        padding:22px;
+
+    }
+
+    .card h3{
+
+        font-size:1.8rem;
+
+    }
+
+    .habit{
+
+        padding:18px;
+
+    }
+
+    .habitTitleRow{
+
+        flex-direction:column;
+
+        align-items:flex-start;
 
     }
 
@@ -1349,248 +1321,132 @@ button{
 
         gap:8px;
 
-        flex-wrap:wrap;
-
     }
 
     .badge{
 
-        font-size:.82rem;
+        font-size:.78rem;
 
-    }
-
-}
-
-/* ==========================================================
-   SMALL PHONES (480px)
-   ========================================================== */
-
-@media (max-width:480px){
-
-    .container{
-
-        padding:14px;
-
-    }
-
-    .topBar{
-
-        align-items:center;
-
-    }
-
-    .logoCircle{
-
-        width:44px;
-        height:44px;
-
-        font-size:1rem;
-
-    }
-
-    .logoText h1{
-
-        font-size:1.25rem;
-
-    }
-
-    .logoText p{
-
-        font-size:.75rem;
-
-    }
-
-    .themeButton{
-
-        width:44px;
-        height:44px;
-
-    }
-
-    .summary{
-
-        grid-template-columns:1fr;
-
-    }
-
-    .card{
-
-        width:100%;
+        padding:7px 10px;
 
     }
 
     .habitButtons{
 
-        justify-content:space-between;
+        grid-template-columns:repeat(3,1fr);
 
     }
 
-    .completeButton,
-    .deleteButton{
+    .habitButtons button{
 
-        flex:1;
+        height:48px;
 
-        height:50px;
+    }
+
+    .empty{
+
+        padding:40px 15px;
 
     }
 
 }
 
 /* ==========================================================
-   EXTRA SMALL DEVICES (360px)
-   ========================================================== */
+   SMALL PHONES
+========================================================== */
 
-@media (max-width:360px){
+@media (max-width:400px){
 
-    h1{
+    .container{
 
-        font-size:1.1rem;
-
-    }
-
-    h2{
-
-        font-size:1.15rem;
+        padding:12px;
 
     }
 
-    .logo{
+    .hero h2{
 
-        gap:10px;
+        font-size:1.3rem;
 
     }
 
     .logoCircle{
 
-        width:40px;
-        height:40px;
+        width:52px;
+
+        height:52px;
 
     }
 
     .themeButton{
 
-        width:40px;
-        height:40px;
+        height:48px;
 
     }
 
-    .badge{
+    .habitButtons{
 
-        width:100%;
-
-        justify-content:center;
+        gap:8px;
 
     }
 
 }
 
 /* ==========================================================
-   TOUCH DEVICES
-   ========================================================== */
+   TRANSITIONS
+========================================================== */
 
-@media (hover:none){
-
-    .habit:hover,
-    .card:hover,
-    .addHabit:hover,
-    .themeButton:hover{
-
-        transform:none;
-
-        box-shadow:var(--shadow);
-
-    }
-
-    .completeButton,
-    .deleteButton,
-    .themeButton,
-    .addButton{
-
-        min-height:48px;
-
-    }
-
-}
-
-/* ==========================================================
-   LANDSCAPE PHONE
-   ========================================================== */
-
-@media (max-height:500px){
-
-    header{
-
-        margin-bottom:24px;
-
-    }
-
-    .hero{
-
-        gap:14px;
-
-    }
-
-}
-
-/* ==========================================================
-   IMAGE SAFETY
-   ========================================================== */
-
-img{
-
-    max-width:100%;
-
-    display:block;
-
-}
-
-/* ==========================================================
-   LINKS
-   ========================================================== */
-
-a{
-
-    color:inherit;
-
-    text-decoration:none;
-
-}
-
-/* ==========================================================
-   DISABLE HORIZONTAL SCROLL
-   ========================================================== */
-
-html,
-body{
-
-    overflow-x:hidden;
-
-}
-
-/* ==========================================================
-   FINAL POLISH
-   ========================================================== */
-
-.habit,
+button,
+input,
+select,
 .card,
-.addHabit{
+.habit,
+.badge,
+.categoryBadge,
+.searchContainer{
 
-    overflow:hidden;
-
-}
-
-button{
-
-    cursor:pointer;
-
-}
-
-input{
-
-    min-width:0;
+    transition:
+        background .25s,
+        color .25s,
+        border-color .25s,
+        transform .25s,
+        box-shadow .25s;
 
 }
 
 /* ==========================================================
-   END OF DAY 3
-   ========================================================== */
+   UTILITIES
+========================================================== */
+
+.hidden{
+
+    display:none !important;
+
+}
+
+.textCenter{
+
+    text-align:center;
+
+}
+
+.fullWidth{
+
+    width:100%;
+
+}
+
+.marginTop{
+
+    margin-top:20px;
+
+}
+
+.marginBottom{
+
+    margin-bottom:20px;
+
+}
+
+/* ==========================================================
+   END
+========================================================== */

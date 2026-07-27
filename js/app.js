@@ -1,14 +1,7 @@
-/* ==========================================================
-   HABIT TRACKER
-   Day 5
-   app.js
-   Part 1 / 4
-========================================================== */
-
 "use strict";
 
 /* ==========================================================
-   STORAGE
+   CONFIGURATION
 ========================================================== */
 
 const STORAGE_KEY = "habit_tracker_data";
@@ -19,7 +12,6 @@ const THEME_KEY = "habit_tracker_theme";
 ========================================================== */
 
 const CATEGORIES = [
-
     "General",
     "Health",
     "Fitness",
@@ -27,11 +19,10 @@ const CATEGORIES = [
     "Work",
     "Reading",
     "Personal"
-
 ];
 
 /* ==========================================================
-   APP STATE
+   APPLICATION STATE
 ========================================================== */
 
 let habits = [];
@@ -62,7 +53,7 @@ const habitTotal =
 const habitCount =
     document.getElementById("habitCount");
 
-const completedToday =
+const progressText =
     document.getElementById("completedToday");
 
 const progressBar =
@@ -71,37 +62,11 @@ const progressBar =
 const themeButton =
     document.getElementById("themeButton");
 
-/* ==========================================================
-   DATE HELPERS
-========================================================== */
+const searchInput =
+    document.getElementById("searchInput");
 
-function todayKey(){
-
-    const d = new Date();
-
-    return [
-
-        d.getFullYear(),
-
-        String(d.getMonth()+1)
-            .padStart(2,"0"),
-
-        String(d.getDate())
-            .padStart(2,"0")
-
-    ].join("-");
-
-}
-
-function daysBetween(a,b){
-
-    return Math.round(
-
-        (b-a)/86400000
-
-    );
-
-}
+const sortSelect =
+    document.getElementById("sortSelect");
 
 /* ==========================================================
    STORAGE
@@ -121,13 +86,17 @@ function saveHabits(){
 
 function loadHabits(){
 
-    const data =
+    const saved =
 
-        localStorage.getItem(STORAGE_KEY);
+        localStorage.getItem(
 
-    if(!data){
+            STORAGE_KEY
 
-        habits=[];
+        );
+
+    if(!saved){
+
+        habits = [];
 
         return;
 
@@ -135,20 +104,110 @@ function loadHabits(){
 
     try{
 
-        habits=JSON.parse(data);
+        habits = JSON.parse(saved);
 
     }
 
     catch{
 
-        habits=[];
+        habits = [];
 
     }
 
 }
 
 /* ==========================================================
-   CREATE HABIT
+   THEME
+========================================================== */
+
+function loadTheme(){
+
+    const saved =
+
+        localStorage.getItem(
+
+            THEME_KEY
+
+        );
+
+    if(saved === "dark"){
+
+        document.body.classList.add(
+
+            "dark"
+
+        );
+
+    }
+
+}
+
+function toggleTheme(){
+
+    document.body.classList.toggle(
+
+        "dark"
+
+    );
+
+    localStorage.setItem(
+
+        THEME_KEY,
+
+        document.body.classList.contains(
+
+            "dark"
+
+        )
+
+        ? "dark"
+
+        : "light"
+
+    );
+
+}
+
+/* ==========================================================
+   DATE UTILITIES
+========================================================== */
+
+function todayKey(){
+
+    const date = new Date();
+
+    return [
+
+        date.getFullYear(),
+
+        String(
+
+            date.getMonth()+1
+
+        ).padStart(2,"0"),
+
+        String(
+
+            date.getDate()
+
+        ).padStart(2,"0")
+
+    ].join("-");
+
+}
+
+function daysBetween(a,b){
+
+    return Math.floor(
+
+        (b-a)/86400000
+
+    );
+
+}
+
+/* ==========================================================
+   HABIT MODEL
 ========================================================== */
 
 function createHabit(name){
@@ -157,13 +216,7 @@ function createHabit(name){
 
         id:
 
-            Date.now()+
-
-            Math.floor(
-
-                Math.random()*100000
-
-            ),
+            crypto.randomUUID(),
 
         name:name,
 
@@ -188,7 +241,7 @@ function createHabit(name){
 }
 
 /* ==========================================================
-   UPGRADE OLD SAVES
+   SAVE UPGRADE
 ========================================================== */
 
 function upgradeHabitData(){
@@ -197,57 +250,71 @@ function upgradeHabitData(){
 
         if(!habit.id){
 
-            habit.id=
+            habit.id =
 
-                Date.now()+
-
-                Math.floor(
-
-                    Math.random()*100000
-
-                );
+                crypto.randomUUID();
 
         }
 
-        if(typeof habit.category!=="string"){
+        if(!habit.category){
 
-            habit.category="General";
+            habit.category =
 
-        }
-
-        if(typeof habit.favorite!=="boolean"){
-
-            habit.favorite=false;
+                "General";
 
         }
 
-        if(typeof habit.notes!=="string"){
+        if(typeof habit.favorite
 
-            habit.notes="";
+            !== "boolean"){
 
-        }
+            habit.favorite =
 
-        if(typeof habit.history!=="object"){
-
-            habit.history={};
+                false;
 
         }
 
-        if(typeof habit.streak!=="number"){
+        if(typeof habit.notes
 
-            habit.streak=0;
+            !== "string"){
 
-        }
-
-        if(typeof habit.longestStreak!=="number"){
-
-            habit.longestStreak=0;
+            habit.notes = "";
 
         }
 
-        if(typeof habit.totalCompletions!=="number"){
+        if(typeof habit.history
 
-            habit.totalCompletions=0;
+            !== "object"
+
+            ||
+
+            habit.history===null){
+
+            habit.history = {};
+
+        }
+
+        if(typeof habit.streak
+
+            !== "number"){
+
+            habit.streak = 0;
+
+        }
+
+        if(typeof habit.longestStreak
+
+            !== "number"){
+
+            habit.longestStreak = 0;
+
+        }
+
+        if(typeof habit.totalCompletions
+
+            !== "number"){
+
+            habit.totalCompletions = 0;
 
         }
 
@@ -256,66 +323,38 @@ function upgradeHabitData(){
 }
 
 /* ==========================================================
-   THEME
+   FIND HABIT
 ========================================================== */
 
-function loadTheme(){
+function getHabit(id){
 
-    const theme=
+    return habits.find(
 
-        localStorage.getItem(THEME_KEY);
+        habit =>
 
-    if(theme==="dark"){
-
-        document.body.classList.add("dark");
-
-    }
-
-    else{
-
-        document.body.classList.remove("dark");
-
-    }
-
-}
-
-function toggleTheme(){
-
-    document.body.classList.toggle("dark");
-
-    localStorage.setItem(
-
-        THEME_KEY,
-
-        document.body.classList.contains("dark")
-
-        ? "dark"
-
-        : "light"
+        habit.id === id
 
     );
 
 }
 
 /* ==========================================================
-   SEARCH
+   FILTERING
 ========================================================== */
 
-function searchHabits(){
+function getVisibleHabits(){
 
-    if(currentSearch===""){
+    let list = [...habits];
 
-        return habits;
+    if(currentSearch !== ""){
 
-    }
+        const search =
 
-    return habits.filter(habit=>{
+            currentSearch
 
-        const search=
+            .toLowerCase();
 
-            currentSearch.toLowerCase();
-
-        return(
+        list = list.filter(habit =>
 
             habit.name
 
@@ -333,41 +372,37 @@ function searchHabits(){
 
         );
 
-    });
-
-}
-
-/* ==========================================================
-   SORT
-========================================================== */
-
-function sortHabits(list){
-
-    const sorted=[...list];
+    }
 
     switch(currentSort){
 
         case "favorite":
 
-            sorted.sort((a,b)=>{
+            list.sort(
 
-                if(a.favorite===b.favorite){
+                (a,b)=>
 
-                    return 0;
+                Number(b.favorite)
 
-                }
+                -
 
-                return a.favorite ? -1 : 1;
+                Number(a.favorite)
 
-            });
+            );
 
             break;
 
         case "alphabetical":
 
-            sorted.sort((a,b)=>
+            list.sort(
 
-                a.name.localeCompare(b.name)
+                (a,b)=>
+
+                a.name.localeCompare(
+
+                    b.name
+
+                )
 
             );
 
@@ -375,7 +410,9 @@ function sortHabits(list){
 
         case "streak":
 
-            sorted.sort((a,b)=>
+            list.sort(
+
+                (a,b)=>
 
                 b.streak-a.streak
 
@@ -385,9 +422,13 @@ function sortHabits(list){
 
         case "completed":
 
-            sorted.sort((a,b)=>
+            list.sort(
 
-                b.totalCompletions-
+                (a,b)=>
+
+                b.totalCompletions
+
+                -
 
                 a.totalCompletions
 
@@ -397,7 +438,9 @@ function sortHabits(list){
 
         case "newest":
 
-            sorted.sort((a,b)=>
+            list.sort(
+
+                (a,b)=>
 
                 b.created-a.created
 
@@ -407,7 +450,9 @@ function sortHabits(list){
 
         case "oldest":
 
-            sorted.sort((a,b)=>
+            list.sort(
+
+                (a,b)=>
 
                 a.created-b.created
 
@@ -417,55 +462,45 @@ function sortHabits(list){
 
     }
 
-    return sorted;
+    return list;
 
 }
-
-function visibleHabits(){
-
-    return sortHabits(
-
-        searchHabits()
-
-    );
-
-}
-
-/* ==========================================================
-   DAY 5
-   app.js
-   Part 2 / 4
-========================================================== */
 
 /* ==========================================================
    HISTORY HELPERS
 ========================================================== */
 
-function completionDates(habit){
+function isCompletedToday(habit){
+
+    return habit.history[todayKey()] === true;
+
+}
+
+function getCompletionDates(habit){
 
     return Object.keys(habit.history)
 
-        .filter(date=>habit.history[date])
+        .filter(date => habit.history[date])
 
         .sort();
 
 }
 
-function completedToday(habit){
-
-    return habit.history[todayKey()]===true;
-
-}
-
 /* ==========================================================
-   COMPLETE HABIT
+   TOGGLE COMPLETION
 ========================================================== */
 
-function toggleHabit(index){
+function toggleHabit(id){
 
-    const habit=visibleHabits()[index];
+    const habit = getHabit(id);
 
-    const today=todayKey();
+    if(!habit){
+
+        return;
+
+    }
+
+    const today = todayKey();
 
     if(habit.history[today]){
 
@@ -475,11 +510,11 @@ function toggleHabit(index){
 
     else{
 
-        habit.history[today]=true;
+        habit.history[today] = true;
 
     }
 
-    refreshHabit(habit);
+    updateHabitStats(habit);
 
     renderHabits();
 
@@ -491,27 +526,31 @@ function toggleHabit(index){
 
 function calculateCurrentStreak(habit){
 
-    let streak=0;
+    let streak = 0;
 
-    const date=new Date();
+    const date = new Date();
 
     while(true){
 
-        const key=[
+        const key = [
 
             date.getFullYear(),
 
-            String(date.getMonth()+1)
-            .padStart(2,"0"),
+            String(date.getMonth()+1).padStart(2,"0"),
 
-            String(date.getDate())
-            .padStart(2,"0")
+            String(date.getDate()).padStart(2,"0")
 
         ].join("-");
 
         if(habit.history[key]){
 
             streak++;
+
+            date.setDate(
+
+                date.getDate()-1
+
+            );
 
         }
 
@@ -520,12 +559,6 @@ function calculateCurrentStreak(habit){
             break;
 
         }
-
-        date.setDate(
-
-            date.getDate()-1
-
-        );
 
     }
 
@@ -539,7 +572,7 @@ function calculateCurrentStreak(habit){
 
 function calculateLongestStreak(habit){
 
-    const dates=completionDates(habit);
+    const dates = getCompletionDates(habit);
 
     if(dates.length===0){
 
@@ -547,15 +580,15 @@ function calculateLongestStreak(habit){
 
     }
 
-    let best=1;
+    let longest = 1;
 
-    let current=1;
+    let current = 1;
 
     for(let i=1;i<dates.length;i++){
 
-        const previous=new Date(dates[i-1]);
+        const previous = new Date(dates[i-1]);
 
-        const next=new Date(dates[i]);
+        const next = new Date(dates[i]);
 
         if(daysBetween(previous,next)===1){
 
@@ -569,15 +602,15 @@ function calculateLongestStreak(habit){
 
         }
 
-        if(current>best){
+        if(current>longest){
 
-            best=current;
+            longest=current;
 
         }
 
     }
 
-    return best;
+    return longest;
 
 }
 
@@ -587,17 +620,57 @@ function calculateLongestStreak(habit){
 
 function calculateTotalCompletions(habit){
 
-    return completionDates(habit).length;
+    return getCompletionDates(habit).length;
 
 }
 
 /* ==========================================================
-   COMPLETION RATE
+   WEEKLY COMPLETION
+========================================================== */
+
+function calculateWeeklyCompletion(habit){
+
+    let count = 0;
+
+    for(let i=0;i<7;i++){
+
+        const date = new Date();
+
+        date.setDate(
+
+            date.getDate()-i
+
+        );
+
+        const key=[
+
+            date.getFullYear(),
+
+            String(date.getMonth()+1).padStart(2,"0"),
+
+            String(date.getDate()).padStart(2,"0")
+
+        ].join("-");
+
+        if(habit.history[key]){
+
+            count++;
+
+        }
+
+    }
+
+    return count;
+
+}
+
+/* ==========================================================
+   COMPLETION %
 ========================================================== */
 
 function calculateCompletionRate(habit){
 
-    const totalDays=Math.max(
+    const days = Math.max(
 
         1,
 
@@ -613,55 +686,13 @@ function calculateCompletionRate(habit){
 
     return Math.round(
 
-        habit.totalCompletions
+        habit.totalCompletions /
 
-        /totalDays
+        days *
 
-        *100
+        100
 
     );
-
-}
-
-/* ==========================================================
-   WEEKLY COMPLETION
-========================================================== */
-
-function weeklyCompletion(habit){
-
-    let completed=0;
-
-    for(let i=0;i<7;i++){
-
-        const date=new Date();
-
-        date.setDate(
-
-            date.getDate()-i
-
-        );
-
-        const key=[
-
-            date.getFullYear(),
-
-            String(date.getMonth()+1)
-            .padStart(2,"0"),
-
-            String(date.getDate())
-            .padStart(2,"0")
-
-        ].join("-");
-
-        if(habit.history[key]){
-
-            completed++;
-
-        }
-
-    }
-
-    return completed;
 
 }
 
@@ -669,9 +700,9 @@ function weeklyCompletion(habit){
    LAST COMPLETED
 ========================================================== */
 
-function lastCompleted(habit){
+function getLastCompleted(habit){
 
-    const dates=completionDates(habit);
+    const dates = getCompletionDates(habit);
 
     if(dates.length===0){
 
@@ -679,9 +710,7 @@ function lastCompleted(habit){
 
     }
 
-    const latest=
-
-        dates[dates.length-1];
+    const latest = dates[dates.length-1];
 
     if(latest===todayKey()){
 
@@ -694,28 +723,100 @@ function lastCompleted(habit){
 }
 
 /* ==========================================================
-   REFRESH STATS
+   UPDATE STATS
 ========================================================== */
 
-function refreshHabit(habit){
+function updateHabitStats(habit){
 
-    habit.streak=
+    habit.streak =
 
         calculateCurrentStreak(habit);
 
-    habit.longestStreak=
+    habit.longestStreak =
 
         calculateLongestStreak(habit);
 
-    habit.totalCompletions=
+    habit.totalCompletions =
 
         calculateTotalCompletions(habit);
 
 }
 
-function refreshAllHabits(){
+function updateAllHabitStats(){
 
-    habits.forEach(refreshHabit);
+    habits.forEach(habit=>{
+
+        updateHabitStats(habit);
+
+    });
+
+}
+
+/* ==========================================================
+   ADD HABIT
+========================================================== */
+
+function addHabit(){
+
+    const name =
+
+        habitInput.value.trim();
+
+    if(name===""){
+
+        alert(
+
+            "Please enter a habit."
+
+        );
+
+        return;
+
+    }
+
+    habits.push(
+
+        createHabit(name)
+
+    );
+
+    habitInput.value="";
+
+    renderHabits();
+
+}
+
+/* ==========================================================
+   DELETE HABIT
+========================================================== */
+
+function deleteHabit(id){
+
+    const habit = getHabit(id);
+
+    if(!habit){
+
+        return;
+
+    }
+
+    if(!confirm(
+
+        `Delete "${habit.name}"?`
+
+    )){
+
+        return;
+
+    }
+
+    habits = habits.filter(
+
+        h => h.id !== id
+
+    );
+
+    renderHabits();
 
 }
 
@@ -723,13 +824,17 @@ function refreshAllHabits(){
    FAVORITES
 ========================================================== */
 
-function toggleFavorite(index){
+function toggleFavorite(id){
 
-    const habit=
+    const habit = getHabit(id);
 
-        visible+Habits()[index];
+    if(!habit){
 
-    habit.favorite=
+        return;
+
+    }
+
+    habit.favorite =
 
         !habit.favorite;
 
@@ -741,15 +846,19 @@ function toggleFavorite(index){
    RENAME
 ========================================================== */
 
-function renameHabit(index){
+function renameHabit(id){
 
-    const habit=
+    const habit = getHabit(id);
 
-        visibleHabits()[index];
+    if(!habit){
 
-    const value=prompt(
+        return;
 
-        "Rename Habit",
+    }
+
+    const value = prompt(
+
+        "Rename habit",
 
         habit.name
 
@@ -761,7 +870,7 @@ function renameHabit(index){
 
     }
 
-    const name=value.trim();
+    const name = value.trim();
 
     if(name===""){
 
@@ -769,7 +878,7 @@ function renameHabit(index){
 
     }
 
-    habit.name=name;
+    habit.name = name;
 
     renderHabits();
 
@@ -779,13 +888,17 @@ function renameHabit(index){
    NOTES
 ========================================================== */
 
-function editNotes(index){
+function editNotes(id){
 
-    const habit=
+    const habit = getHabit(id);
 
-        visibleHabits()[index];
+    if(!habit){
 
-    const value=prompt(
+        return;
+
+    }
+
+    const value = prompt(
 
         "Notes",
 
@@ -799,9 +912,11 @@ function editNotes(index){
 
     }
 
-    habit.notes=value;
+    habit.notes = value;
 
     saveHabits();
+
+    renderHabits();
 
 }
 
@@ -809,15 +924,19 @@ function editNotes(index){
    CATEGORY
 ========================================================== */
 
-function changeCategory(index){
+function changeCategory(id){
 
-    const habit=
+    const habit = getHabit(id);
 
-        visibleHabits()[index];
+    if(!habit){
 
-    const value=prompt(
+        return;
 
-        "Category:\n"+
+    }
+
+    const value = prompt(
+
+        "Category\n\n"+
 
         CATEGORIES.join(", "),
 
@@ -831,39 +950,33 @@ function changeCategory(index){
 
     }
 
-    const category=value.trim();
-
-    if(category===""){
+    if(value.trim()===""){
 
         return;
 
     }
 
-    habit.category=category;
+    habit.category =
+
+        value.trim();
 
     renderHabits();
 
 }
 
 /* ==========================================================
-   DAY 5
-   app.js
-   Part 3 / 4
-========================================================== */
-
-/* ==========================================================
    HABIT CARD
 ========================================================== */
 
-function createHabitCard(habit,index){
+function createHabitCard(habit){
 
     const card = document.createElement("div");
 
     card.className = "habit fadeIn";
 
-    const rate = calculateCompletionRate(habit);
+    const weekly = calculateWeeklyCompletion(habit);
 
-    const weekly = weeklyCompletion(habit);
+    const completionRate = calculateCompletionRate(habit);
 
     card.innerHTML = `
 
@@ -878,7 +991,7 @@ function createHabitCard(habit,index){
                         ${
                             habit.favorite
                             ? '<i class="fa-solid fa-star favoriteIcon"></i>'
-                            : ''
+                            : ""
                         }
 
                         ${habit.name}
@@ -925,7 +1038,7 @@ function createHabitCard(habit,index){
 
                         <i class="fa-solid fa-chart-line"></i>
 
-                        ${rate}%
+                        ${completionRate}%
 
                     </span>
 
@@ -947,7 +1060,7 @@ function createHabitCard(habit,index){
 
                     <strong>
 
-                        ${lastCompleted(habit)}
+                        ${getLastCompleted(habit)}
 
                     </strong>
 
@@ -958,13 +1071,17 @@ function createHabitCard(habit,index){
 
                     ?
 
-                    `<div class="habitNotes">
+                    `
+
+                    <div class="habitNotes">
 
                         <i class="fa-solid fa-note-sticky"></i>
 
                         ${habit.notes}
 
-                    </div>`
+                    </div>
+
+                    `
 
                     :
 
@@ -977,21 +1094,34 @@ function createHabitCard(habit,index){
             <div class="habitButtons">
 
                 <button
+
                     class="favoriteButton"
-                    data-index="${index}"
+
+                    data-id="${habit.id}"
+
                     title="Favorite">
 
                     <i class="${
                         habit.favorite
-                        ? "fa-solid fa-star"
-                        : "fa-regular fa-star"
+
+                        ?
+
+                        "fa-solid fa-star"
+
+                        :
+
+                        "fa-regular fa-star"
+
                     }"></i>
 
                 </button>
 
                 <button
-                    class="editButton"
-                    data-index="${index}"
+
+                    class="renameButton"
+
+                    data-id="${habit.id}"
+
                     title="Rename">
 
                     <i class="fa-solid fa-pen"></i>
@@ -999,8 +1129,11 @@ function createHabitCard(habit,index){
                 </button>
 
                 <button
+
                     class="notesButton"
-                    data-index="${index}"
+
+                    data-id="${habit.id}"
+
                     title="Notes">
 
                     <i class="fa-solid fa-note-sticky"></i>
@@ -1008,8 +1141,11 @@ function createHabitCard(habit,index){
                 </button>
 
                 <button
+
                     class="categoryButton"
-                    data-index="${index}"
+
+                    data-id="${habit.id}"
+
                     title="Category">
 
                     <i class="fa-solid fa-tag"></i>
@@ -1017,12 +1153,23 @@ function createHabitCard(habit,index){
                 </button>
 
                 <button
+
                     class="completeButton ${
-                        completedToday(habit)
-                        ? "completed"
-                        : ""
+
+                        isCompletedToday(habit)
+
+                        ?
+
+                        "completed"
+
+                        :
+
+                        ""
+
                     }"
-                    data-index="${index}"
+
+                    data-id="${habit.id}"
+
                     title="Complete">
 
                     <i class="fa-solid fa-check"></i>
@@ -1030,8 +1177,11 @@ function createHabitCard(habit,index){
                 </button>
 
                 <button
+
                     class="deleteButton"
-                    data-index="${index}"
+
+                    data-id="${habit.id}"
+
                     title="Delete">
 
                     <i class="fa-solid fa-trash"></i>
@@ -1049,32 +1199,120 @@ function createHabitCard(habit,index){
 }
 
 /* ==========================================================
+   COUNTERS
+========================================================== */
+
+function updateCounters(){
+
+    habitTotal.textContent = habits.length;
+
+    habitCount.textContent =
+
+        habits.length +
+
+        (
+
+            habits.length === 1
+
+            ?
+
+            " Habit"
+
+            :
+
+            " Habits"
+
+        );
+
+}
+
+/* ==========================================================
+   DAILY PROGRESS
+========================================================== */
+
+function updateProgress(){
+
+    if(!progressText || !progressBar){
+
+        return;
+
+    }
+
+    if(habits.length===0){
+
+        progressText.textContent = "0%";
+
+        progressBar.style.width = "0%";
+
+        return;
+
+    }
+
+    const completed = habits.filter(
+
+        habit => isCompletedToday(habit)
+
+    ).length;
+
+    const percent = Math.round(
+
+        completed /
+
+        habits.length *
+
+        100
+
+    );
+
+    progressText.textContent =
+
+        percent + "%";
+
+    progressBar.style.width =
+
+        percent + "%";
+
+}
+
+/* ==========================================================
    RENDER
 ========================================================== */
 
 function renderHabits(){
 
+    updateAllHabitStats();
+
     habitList.innerHTML = "";
 
-    refreshAllHabits();
+    const visible =
 
-    const list = visibleHabits();
+        getVisibleHabits();
 
-    if(list.length === 0){
+    if(visible.length===0){
 
-        emptyState.classList.remove("hidden");
+        emptyState.classList.remove(
 
-    }else{
+            "hidden"
 
-        emptyState.classList.add("hidden");
+        );
 
     }
 
-    list.forEach((habit,index)=>{
+    else{
+
+        emptyState.classList.add(
+
+            "hidden"
+
+        );
+
+    }
+
+    visible.forEach(habit=>{
 
         habitList.appendChild(
 
-            createHabitCard(habit,index)
+            createHabitCard(habit)
 
         );
 
@@ -1091,131 +1329,7 @@ function renderHabits(){
 }
 
 /* ==========================================================
-   ADD HABIT
-========================================================== */
-
-function addHabit(){
-
-    const name = habitInput.value.trim();
-
-    if(name === ""){
-
-        alert("Please enter a habit.");
-
-        return;
-
-    }
-
-    habits.push(
-
-        createHabit(name)
-
-    );
-
-    habitInput.value = "";
-
-    renderHabits();
-
-}
-
-/* ==========================================================
-   DELETE HABIT
-========================================================== */
-
-function deleteHabit(index){
-
-    const habit = visibleHabits()[index];
-
-    if(!confirm(`Delete "${habit.name}"?`)){
-
-        return;
-
-    }
-
-    habits = habits.filter(
-
-        h => h.id !== habit.id
-
-    );
-
-    renderHabits();
-
-}
-
-/* ==========================================================
-   COUNTERS
-========================================================== */
-
-function updateCounters(){
-
-    habitTotal.textContent = habits.length;
-
-    habitCount.textContent =
-
-        habits.length +
-
-        (habits.length === 1
-
-            ? " Habit"
-
-            : " Habits");
-
-}
-
-/* ==========================================================
-   PROGRESS
-========================================================== */
-
-function updateProgress(){
-
-    if(habits.length === 0){
-
-        completedToday.textContent = "0%";
-
-        if(progressBar){
-
-            progressBar.style.width = "0%";
-
-        }
-
-        return;
-
-    }
-
-    const completed = habits.filter(
-
-        completedToday
-
-    ).length;
-
-    const percent = Math.round(
-
-        completed /
-
-        habits.length *
-
-        100
-
-    );
-
-    completedToday.textContent = percent + "%";
-
-    if(progressBar){
-
-        progressBar.style.width = percent + "%";
-
-    }
-
-}
-
-/* ==========================================================
-   DAY 5
-   app.js
-   Part 4 / 4
-========================================================== */
-
-/* ==========================================================
-   EVENT LISTENERS
+   BUTTON EVENTS
 ========================================================== */
 
 function attachEvents(){
@@ -1226,7 +1340,7 @@ function attachEvents(){
 
             toggleHabit(
 
-                Number(button.dataset.index)
+                button.dataset.id
 
             );
 
@@ -1240,7 +1354,7 @@ function attachEvents(){
 
             deleteHabit(
 
-                Number(button.dataset.index)
+                button.dataset.id
 
             );
 
@@ -1254,7 +1368,7 @@ function attachEvents(){
 
             toggleFavorite(
 
-                Number(button.dataset.index)
+                button.dataset.id
 
             );
 
@@ -1262,13 +1376,13 @@ function attachEvents(){
 
     });
 
-    document.querySelectorAll(".editButton").forEach(button=>{
+    document.querySelectorAll(".renameButton").forEach(button=>{
 
         button.onclick=()=>{
 
             renameHabit(
 
-                Number(button.dataset.index)
+                button.dataset.id
 
             );
 
@@ -1282,7 +1396,7 @@ function attachEvents(){
 
             editNotes(
 
-                Number(button.dataset.index)
+                button.dataset.id
 
             );
 
@@ -1296,7 +1410,7 @@ function attachEvents(){
 
             changeCategory(
 
-                Number(button.dataset.index)
+                button.dataset.id
 
             );
 
@@ -1310,10 +1424,6 @@ function attachEvents(){
    SEARCH
 ========================================================== */
 
-const searchInput =
-
-    document.getElementById("searchInput");
-
 if(searchInput){
 
     searchInput.addEventListener(
@@ -1322,7 +1432,7 @@ if(searchInput){
 
         function(){
 
-            currentSearch=this.value;
+            currentSearch = this.value;
 
             renderHabits();
 
@@ -1336,10 +1446,6 @@ if(searchInput){
    SORT
 ========================================================== */
 
-const sortSelect =
-
-    document.getElementById("sortSelect");
-
 if(sortSelect){
 
     sortSelect.addEventListener(
@@ -1348,7 +1454,7 @@ if(sortSelect){
 
         function(){
 
-            currentSort=this.value;
+            currentSort = this.value;
 
             renderHabits();
 
@@ -1359,7 +1465,7 @@ if(sortSelect){
 }
 
 /* ==========================================================
-   INPUT EVENTS
+   ADD HABIT
 ========================================================== */
 
 addButton.addEventListener(
@@ -1386,6 +1492,10 @@ habitInput.addEventListener(
 
 );
 
+/* ==========================================================
+   THEME
+========================================================== */
+
 themeButton.addEventListener(
 
     "click",
@@ -1395,12 +1505,12 @@ themeButton.addEventListener(
 );
 
 /* ==========================================================
-   CLEANUP
+   CLEAN OLD HISTORY
 ========================================================== */
 
 function cleanupHistory(){
 
-    const cutoff=new Date();
+    const cutoff = new Date();
 
     cutoff.setFullYear(
 
@@ -1408,17 +1518,33 @@ function cleanupHistory(){
 
     );
 
-    const cutoffDate=cutoff.toISOString()
+    const oldest = [
 
-        .split("T")[0];
+        cutoff.getFullYear(),
+
+        String(
+
+            cutoff.getMonth()+1
+
+        ).padStart(2,"0"),
+
+        String(
+
+            cutoff.getDate()
+
+        ).padStart(2,"0")
+
+    ].join("-");
 
     habits.forEach(habit=>{
 
-        Object.keys(habit.history)
+        Object.keys(
 
-        .forEach(date=>{
+            habit.history
 
-            if(date<cutoffDate){
+        ).forEach(date=>{
+
+            if(date<oldest){
 
                 delete habit.history[date];
 
@@ -1431,7 +1557,7 @@ function cleanupHistory(){
 }
 
 /* ==========================================================
-   SAVE BEFORE EXIT
+   SAVE WHEN LEAVING
 ========================================================== */
 
 window.addEventListener(
@@ -1454,7 +1580,7 @@ function initialize(){
 
     cleanupHistory();
 
-    refreshAllHabits();
+    updateAllHabitStats();
 
     loadTheme();
 

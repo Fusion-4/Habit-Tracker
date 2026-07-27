@@ -1,23 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>Habit Tracker</title>
 
-    <!-- Google Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        rel="stylesheet"
+        href="css/style.css">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
 
-    <!-- Main Styles -->
-    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
 </head>
+
 <body>
 
 <div class="container">
@@ -29,108 +45,238 @@
             <div class="logo">
 
                 <div class="logoCircle">
+
                     <i class="fa-solid fa-check"></i>
+
                 </div>
 
                 <div class="logoText">
+
                     <h1>Habit Tracker</h1>
-                    <p>Day 2 • UI Refresh</p>
+
+                    <p>Build Better Habits Every Day</p>
+
                 </div>
 
             </div>
 
-            <button class="themeButton" id="themeButton">
+            <button
+                id="themeButton"
+                class="themeButton">
+
                 <i class="fa-solid fa-moon"></i>
+
             </button>
-
-        </div>
-
-        <div class="hero">
-
-            <div class="heroLeft">
-
-                <h2>Build Better Habits</h2>
-
-                <p>
-                    Create healthy routines, stay consistent, and watch your
-                    progress grow every day.
-                </p>
-
-            </div>
-
-            <div class="summary">
-
-                <div class="card">
-                    <h3 id="habitTotal">0</h3>
-                    <span>Total Habits</span>
-                </div>
-
-                <div class="card">
-                    <h3 id="completedToday">0%</h3>
-                    <span>Completed Today</span>
-                </div>
-
-            </div>
 
         </div>
 
     </header>
 
-    <main>
+    <section class="hero">
 
-        <section class="addHabit">
+        <h2>
 
-            <h2>Add a Habit</h2>
+            Small habits create big results.
 
-            <div class="inputRow">
+        </h2>
 
-                <input
-                    id="habitInput"
-                    type="text"
-                    maxlength="50"
-                    placeholder="Enter a new habit...">
+        <p>
 
-                <button class="addButton" id="addButton">
-                    <i class="fa-solid fa-plus"></i>
-                    Add Habit
-                </button>
+            Track your daily habits, build streaks,
+            and stay consistent.
 
-            </div>
+        </p>
 
-        </section>
+    </section>
 
-        <div class="sectionTitle">
+    <section class="summary">
 
-            <h2>Your Habits</h2>
+        <div class="card">
 
-            <div class="habitCount" id="habitCount">
-                0 Habits
+            <h3 id="habitTotal">
+
+                0
+
+            </h3>
+
+            <span>
+
+                Total Habits
+
+            </span>
+
+        </div>
+
+        <div class="card">
+
+            <h3 id="completedToday">
+
+                0%
+
+            </h3>
+
+            <span>
+
+                Completed Today
+
+            </span>
+
+        </div>
+
+    </section>
+
+    <section class="progressSection">
+
+        <div class="progress">
+
+            <div
+                class="progressBar"
+                id="progressBar">
+
             </div>
 
         </div>
 
-        <div class="habitList" id="habitList">
-            <!-- JavaScript inserts habits here -->
+    </section>
+
+    <section class="controls">
+
+        <div class="searchContainer">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+
+                id="searchInput"
+
+                type="text"
+
+                placeholder="Search habits...">
+
         </div>
 
-        <div class="empty" id="emptyState">
+        <select id="sortSelect">
 
-            <div class="emptyIcon">
-                <i class="fa-solid fa-seedling"></i>
-            </div>
+            <option value="favorite">
 
-            <h3>No habits yet</h3>
+                Favorites
 
-            <p>
-                Add your first habit above to start building a daily routine.
-            </p>
+            </option>
+
+            <option value="alphabetical">
+
+                Alphabetical
+
+            </option>
+
+            <option value="streak">
+
+                Current Streak
+
+            </option>
+
+            <option value="completed">
+
+                Most Completed
+
+            </option>
+
+            <option value="newest">
+
+                Newest
+
+            </option>
+
+            <option value="oldest">
+
+                Oldest
+
+            </option>
+
+        </select>
+
+    </section>
+
+    <section class="addHabit">
+
+        <div class="inputRow">
+
+            <input
+
+                id="habitInput"
+
+                type="text"
+
+                maxlength="50"
+
+                placeholder="Enter a new habit...">
+
+            <button
+
+                id="addButton"
+
+                class="addButton">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Add
+
+            </button>
 
         </div>
+
+    </section>
+
+    <section class="habitHeaderRow">
+
+        <h2>
+
+            Your Habits
+
+        </h2>
+
+        <span id="habitCount">
+
+            0 Habits
+
+        </span>
+
+    </section>
+
+    <main
+
+        id="habitList"
+
+        class="habitList">
 
     </main>
 
+    <section
+
+        id="emptyState"
+
+        class="empty">
+
+        <i class="fa-regular fa-face-smile"></i>
+
+        <h3>
+
+            No habits yet
+
+        </h3>
+
+        <p>
+
+            Create your first habit above to begin building your routine.
+
+        </p>
+
+    </section>
+
     <footer>
-        Habit Tracker • Day 2 Development Build
+
+        Habit Tracker • Day 5 Development Build
+
     </footer>
 
 </div>
@@ -138,4 +284,5 @@
 <script src="js/app.js"></script>
 
 </body>
+
 </html>
