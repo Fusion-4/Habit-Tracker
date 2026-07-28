@@ -1589,6 +1589,197 @@ function initialize(){
 }
 
 /* ==========================================================
+   DAY 6
+   STATISTICS ENGINE
+========================================================== */
+
+function completedTodayCount(){
+
+    return habits.filter(
+
+        habit => isCompletedToday(habit)
+
+    ).length;
+
+}
+
+function overallCompletionRate(){
+
+    if(habits.length===0){
+
+        return 0;
+
+    }
+
+    const total = habits.reduce(
+
+        (sum,habit)=>
+
+        sum+calculateCompletionRate(habit),
+
+        0
+
+    );
+
+    return Math.round(
+
+        total/habits.length
+
+    );
+
+}
+
+function longestOverallStreak(){
+
+    if(habits.length===0){
+
+        return 0;
+
+    }
+
+    return Math.max(
+
+        ...habits.map(
+
+            habit=>habit.longestStreak
+
+        )
+
+    );
+
+}
+
+function currentOverallStreak(){
+
+    if(habits.length===0){
+
+        return 0;
+
+    }
+
+    return Math.max(
+
+        ...habits.map(
+
+            habit=>habit.streak
+
+        )
+
+    );
+
+}
+
+function mostCompletedHabit(){
+
+    if(habits.length===0){
+
+        return null;
+
+    }
+
+    let winner = habits[0];
+
+    habits.forEach(habit=>{
+
+        if(
+
+            habit.totalCompletions >
+
+            winner.totalCompletions
+
+        ){
+
+            winner = habit;
+
+        }
+
+    });
+
+    return winner;
+
+}
+
+function updateDashboard(){
+
+    const rate =
+
+        document.getElementById(
+
+            "overallRate"
+
+        );
+
+    const longest =
+
+        document.getElementById(
+
+            "overallLongest"
+
+        );
+
+    const current =
+
+        document.getElementById(
+
+            "overallCurrent"
+
+        );
+
+    const top =
+
+        document.getElementById(
+
+            "topHabit"
+
+        );
+
+    if(rate){
+
+        rate.textContent =
+
+            overallCompletionRate()+"%";
+
+    }
+
+    if(longest){
+
+        longest.textContent =
+
+            longestOverallStreak();
+
+    }
+
+    if(current){
+
+        current.textContent =
+
+            currentOverallStreak();
+
+    }
+
+    if(top){
+
+        const winner =
+
+            mostCompletedHabit();
+
+        top.textContent =
+
+            winner
+
+            ?
+
+            winner.name
+
+            :
+
+            "None";
+
+    }
+
+}
+
+/* ==========================================================
    START APP
 ========================================================== */
 
