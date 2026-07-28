@@ -1,6 +1,6 @@
 /* ==========================================================
    RESET
-========================================================== */
+==========================================================*/
 
 *{
     margin:0;
@@ -16,87 +16,81 @@ body{
 
     font-family:"Inter",sans-serif;
 
-    background:#f4f7fb;
+    background:var(--background);
 
-    color:#1f2937;
+    color:var(--text);
 
-    transition:.3s;
+    transition:
+        background .35s,
+        color .35s;
 
 }
 
 /* ==========================================================
    VARIABLES
-========================================================== */
+==========================================================*/
 
 :root{
 
-    --primary:#2563eb;
+    --primary:#2563EB;
+    --primaryDark:#1D4ED8;
 
-    --primaryDark:#1d4ed8;
+    --green:#22C55E;
+    --orange:#F97316;
+    --yellow:#FACC15;
+    --red:#EF4444;
 
-    --green:#22c55e;
+    --background:#F5F7FB;
+    --card:#FFFFFF;
 
-    --red:#ef4444;
+    --border:#E5E7EB;
 
-    --yellow:#f59e0b;
-
-    --background:#f4f7fb;
-
-    --card:#ffffff;
-
-    --border:#dbe3ef;
-
-    --text:#1f2937;
-
-    --textLight:#6b7280;
+    --text:#111827;
+    --textLight:#6B7280;
 
     --shadow:
-
-        0 8px 30px
-
+        0 12px 30px
         rgba(0,0,0,.08);
+
+    --radius:22px;
 
 }
 
 /* ==========================================================
    DARK MODE
-========================================================== */
+==========================================================*/
 
 body.dark{
 
-    --background:#121826;
+    --background:#101827;
 
-    --card:#1d2433;
+    --card:#1D2433;
 
-    --border:#2f3c53;
+    --border:#303C53;
 
-    --text:#f3f4f6;
+    --text:#F9FAFB;
 
-    --textLight:#9ca3af;
-
-    background:var(--background);
-
-    color:var(--text);
+    --textLight:#A5B4C8;
 
 }
 
 /* ==========================================================
    CONTAINER
-========================================================== */
+==========================================================*/
 
 .container{
 
-    max-width:1150px;
+    width:min(1200px,94%);
 
     margin:auto;
 
-    padding:35px;
+    padding:40px 0 80px;
 
 }
 
 /* ==========================================================
    HEADER
-========================================================== */
+==========================================================*/
 
 header{
 
@@ -112,9 +106,7 @@ header{
 
     align-items:center;
 
-    gap:20px;
-
-    flex-wrap:wrap;
+    gap:25px;
 
 }
 
@@ -130,15 +122,17 @@ header{
 
 .logoCircle{
 
-    width:60px;
+    width:64px;
 
-    height:60px;
+    height:64px;
 
-    border-radius:18px;
+    border-radius:20px;
 
-    background:var(--primary);
-
-    color:white;
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        #5B8CFF
+    );
 
     display:flex;
 
@@ -146,7 +140,9 @@ header{
 
     align-items:center;
 
-    font-size:24px;
+    color:white;
+
+    font-size:28px;
 
     box-shadow:var(--shadow);
 
@@ -156,11 +152,13 @@ header{
 
     font-size:2rem;
 
-    margin-bottom:4px;
+    font-weight:700;
 
 }
 
 .logoText p{
+
+    margin-top:6px;
 
     color:var(--textLight);
 
@@ -168,61 +166,67 @@ header{
 
 /* ==========================================================
    THEME BUTTON
-========================================================== */
+==========================================================*/
 
 .themeButton{
 
-    width:50px;
+    width:56px;
 
-    height:50px;
+    height:56px;
 
     border:none;
 
-    border-radius:14px;
+    border-radius:18px;
+
+    cursor:pointer;
 
     background:var(--card);
 
     color:var(--text);
 
-    cursor:pointer;
+    box-shadow:var(--shadow);
 
     font-size:20px;
 
     transition:.25s;
 
-    box-shadow:var(--shadow);
-
 }
 
 .themeButton:hover{
-
-    transform:translateY(-2px);
 
     background:var(--primary);
 
     color:white;
 
+    transform:translateY(-3px);
+
 }
 
 /* ==========================================================
    HERO
-========================================================== */
+==========================================================*/
 
 .hero{
 
-    margin-top:30px;
+    margin-top:25px;
 
-    background:linear-gradient(
+    padding:45px;
+
+    border-radius:30px;
+
+    background:
+
+    linear-gradient(
+
         135deg,
-        var(--primary),
-        #4f8cff
+
+        #2563EB,
+
+        #5B8CFF
+
     );
 
     color:white;
-
-    border-radius:24px;
-
-    padding:40px;
 
     box-shadow:var(--shadow);
 
@@ -230,36 +234,37 @@ header{
 
 .hero h2{
 
-    font-size:2rem;
+    font-size:2.3rem;
 
-    margin-bottom:12px;
+    margin-bottom:14px;
 
 }
 
 .hero p{
 
-    max-width:650px;
+    max-width:700px;
 
-    line-height:1.6;
+    line-height:1.7;
 
     opacity:.95;
 
 }
 
 /* ==========================================================
-   SUMMARY
-========================================================== */
+   DASHBOARD
+==========================================================*/
 
 .summary{
+
+    margin-top:35px;
 
     display:grid;
 
     grid-template-columns:
-        repeat(2,1fr);
+
+        repeat(auto-fit,minmax(180px,1fr));
 
     gap:20px;
-
-    margin-top:30px;
 
 }
 
@@ -269,31 +274,31 @@ header{
 
     border:1px solid var(--border);
 
-    border-radius:20px;
+    border-radius:22px;
 
-    padding:30px;
+    padding:26px;
 
-    text-align:center;
+    box-shadow:var(--shadow);
 
     transition:.25s;
 
-    box-shadow:var(--shadow);
+    text-align:center;
 
 }
 
 .card:hover{
 
-    transform:translateY(-4px);
+    transform:translateY(-5px);
 
 }
 
 .card h3{
 
-    font-size:2.2rem;
+    font-size:2rem;
 
     color:var(--primary);
 
-    margin-bottom:10px;
+    margin-bottom:8px;
 
 }
 
@@ -301,15 +306,17 @@ header{
 
     color:var(--textLight);
 
+    font-size:.95rem;
+
 }
 
 /* ==========================================================
-   PROGRESS BAR
-========================================================== */
+   PROGRESS
+==========================================================*/
 
 .progressSection{
 
-    margin-top:30px;
+    margin-top:35px;
 
 }
 
@@ -317,11 +324,11 @@ header{
 
     width:100%;
 
-    height:16px;
-
-    background:var(--border);
+    height:18px;
 
     border-radius:100px;
+
+    background:var(--border);
 
     overflow:hidden;
 
@@ -333,31 +340,163 @@ header{
 
     height:100%;
 
-    background:linear-gradient(
-        90deg,
-        #22c55e,
-        #16a34a
-    );
+    border-radius:100px;
 
-    transition:width .45s;
+    background:
+
+        linear-gradient(
+
+            90deg,
+
+            #22C55E,
+
+            #16A34A
+
+        );
+
+    transition:width .5s;
+
+}
+
+/* ==========================================================
+   SECTION TITLES
+==========================================================*/
+
+section h2{
+
+    font-size:1.6rem;
+
+    margin-bottom:18px;
+
+}
+
+/* ==========================================================
+   GLOBAL ANIMATIONS
+==========================================================*/
+
+button,
+input,
+select,
+.card,
+.progressBar{
+
+    transition:
+
+        background .25s,
+
+        color .25s,
+
+        transform .25s,
+
+        border-color .25s,
+
+        box-shadow .25s;
+
+}
+
+button{
+
+    font-family:inherit;
+
+}
+
+button:active{
+
+    transform:scale(.96);
+
+}
+
+/* ==========================================================
+   UTILITIES
+==========================================================*/
+
+.hidden{
+
+    display:none !important;
+
+}
+
+.textCenter{
+
+    text-align:center;
+
+}
+
+/* ==========================================================
+   MOBILE
+==========================================================*/
+
+@media (max-width:900px){
+
+    .topBar{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+    .themeButton{
+
+        width:100%;
+
+    }
+
+}
+
+@media (max-width:650px){
+
+    .container{
+
+        width:94%;
+
+        padding:20px 0 60px;
+
+    }
+
+    .hero{
+
+        padding:28px;
+
+        text-align:center;
+
+    }
+
+    .hero h2{
+
+        font-size:1.8rem;
+
+    }
+
+    .logo{
+
+        flex-direction:column;
+
+        text-align:center;
+
+    }
+
+    .summary{
+
+        grid-template-columns:1fr;
+
+    }
 
 }
 
 /* ==========================================================
    CONTROLS
-========================================================== */
+==========================================================*/
 
 .controls{
+
+    margin-top:40px;
 
     display:flex;
 
     gap:18px;
 
     align-items:center;
-
-    margin-top:30px;
-
-    margin-bottom:30px;
 
     flex-wrap:wrap;
 
@@ -373,15 +512,15 @@ header{
 
     align-items:center;
 
-    gap:12px;
+    gap:14px;
 
     background:var(--card);
 
     border:1px solid var(--border);
 
-    border-radius:16px;
+    border-radius:18px;
 
-    padding:14px 18px;
+    padding:16px 18px;
 
     box-shadow:var(--shadow);
 
@@ -401,13 +540,13 @@ header{
 
     border:none;
 
-    background:transparent;
+    outline:none;
+
+    background:none;
 
     color:var(--text);
 
     font-size:16px;
-
-    outline:none;
 
 }
 
@@ -419,11 +558,11 @@ header{
 
 #sortSelect{
 
-    min-width:190px;
+    min-width:220px;
 
-    padding:14px 18px;
+    padding:16px 18px;
 
-    border-radius:16px;
+    border-radius:18px;
 
     border:1px solid var(--border);
 
@@ -437,23 +576,15 @@ header{
 
     box-shadow:var(--shadow);
 
-    transition:.25s;
-
-}
-
-#sortSelect:hover{
-
-    border-color:var(--primary);
-
 }
 
 /* ==========================================================
    ADD HABIT
-========================================================== */
+==========================================================*/
 
 .addHabit{
 
-    margin-bottom:35px;
+    margin-top:30px;
 
 }
 
@@ -461,9 +592,7 @@ header{
 
     display:flex;
 
-    gap:15px;
-
-    align-items:center;
+    gap:16px;
 
 }
 
@@ -471,9 +600,9 @@ header{
 
     flex:1;
 
-    padding:16px 20px;
+    padding:18px 20px;
 
-    border-radius:16px;
+    border-radius:18px;
 
     border:1px solid var(--border);
 
@@ -483,8 +612,6 @@ header{
 
     font-size:16px;
 
-    transition:.25s;
-
     box-shadow:var(--shadow);
 
 }
@@ -493,23 +620,15 @@ header{
 
     border-color:var(--primary);
 
-    outline:none;
-
-}
-
-#habitInput::placeholder{
-
-    color:var(--textLight);
-
 }
 
 .addButton{
 
-    padding:16px 26px;
+    padding:18px 28px;
 
     border:none;
 
-    border-radius:16px;
+    border-radius:18px;
 
     background:var(--primary);
 
@@ -517,17 +636,15 @@ header{
 
     cursor:pointer;
 
-    font-size:16px;
-
-    font-weight:600;
-
     display:flex;
 
     align-items:center;
 
     gap:10px;
 
-    transition:.25s;
+    font-size:15px;
+
+    font-weight:600;
 
     box-shadow:var(--shadow);
 
@@ -543,25 +660,19 @@ header{
 
 /* ==========================================================
    HABIT HEADER
-========================================================== */
+==========================================================*/
 
 .habitHeaderRow{
+
+    margin-top:40px;
+
+    margin-bottom:25px;
 
     display:flex;
 
     justify-content:space-between;
 
     align-items:center;
-
-    margin-bottom:25px;
-
-    gap:15px;
-
-}
-
-.habitHeaderRow h2{
-
-    font-size:1.6rem;
 
 }
 
@@ -574,108 +685,8 @@ header{
 }
 
 /* ==========================================================
-   GENERIC BUTTONS
-========================================================== */
-
-button{
-
-    font-family:inherit;
-
-}
-
-button:active{
-
-    transform:scale(.96);
-
-}
-
-/* ==========================================================
-   MOBILE
-========================================================== */
-
-@media (max-width:900px){
-
-    .controls{
-
-        flex-direction:column;
-
-        align-items:stretch;
-
-    }
-
-    #sortSelect{
-
-        width:100%;
-
-    }
-
-    .inputRow{
-
-        flex-direction:column;
-
-    }
-
-    #habitInput{
-
-        width:100%;
-
-    }
-
-    .addButton{
-
-        width:100%;
-
-        justify-content:center;
-
-    }
-
-}
-
-@media (max-width:650px){
-
-    .container{
-
-        padding:18px;
-
-    }
-
-    .topBar{
-
-        flex-direction:column;
-
-        align-items:stretch;
-
-    }
-
-    .themeButton{
-
-        width:100%;
-
-    }
-
-    .summary{
-
-        grid-template-columns:1fr;
-
-    }
-
-    .hero{
-
-        padding:28px;
-
-    }
-
-    .hero h2{
-
-        font-size:1.6rem;
-
-    }
-
-}
-
-/* ==========================================================
    HABIT LIST
-========================================================== */
+==========================================================*/
 
 .habitList{
 
@@ -683,13 +694,13 @@ button:active{
 
     flex-direction:column;
 
-    gap:20px;
+    gap:22px;
 
 }
 
 /* ==========================================================
    HABIT CARD
-========================================================== */
+==========================================================*/
 
 .habit{
 
@@ -697,9 +708,9 @@ button:active{
 
     border:1px solid var(--border);
 
-    border-radius:22px;
+    border-radius:24px;
 
-    padding:22px;
+    padding:24px;
 
     box-shadow:var(--shadow);
 
@@ -709,9 +720,7 @@ button:active{
 
 .habit:hover{
 
-    transform:translateY(-3px);
-
-    border-color:var(--primary);
+    transform:translateY(-4px);
 
 }
 
@@ -721,9 +730,7 @@ button:active{
 
     justify-content:space-between;
 
-    align-items:flex-start;
-
-    gap:20px;
+    gap:24px;
 
 }
 
@@ -735,7 +742,7 @@ button:active{
 
 /* ==========================================================
    TITLE
-========================================================== */
+==========================================================*/
 
 .habitTitleRow{
 
@@ -743,7 +750,7 @@ button:active{
 
     align-items:center;
 
-    gap:12px;
+    gap:14px;
 
     flex-wrap:wrap;
 
@@ -751,7 +758,7 @@ button:active{
 
 .habitName{
 
-    font-size:1.3rem;
+    font-size:1.35rem;
 
     font-weight:700;
 
@@ -765,13 +772,13 @@ button:active{
 
 .favoriteIcon{
 
-    color:#FFD43B;
+    color:#FACC15;
 
 }
 
 /* ==========================================================
    CATEGORY
-========================================================== */
+==========================================================*/
 
 .categoryBadge{
 
@@ -781,25 +788,27 @@ button:active{
 
     gap:8px;
 
-    padding:7px 14px;
+    padding:8px 14px;
 
-    border-radius:100px;
+    border-radius:999px;
 
     background:rgba(37,99,235,.10);
 
     color:var(--primary);
 
-    font-size:.82rem;
+    font-size:.85rem;
 
     font-weight:600;
 
 }
 
 /* ==========================================================
-   INFO BADGES
-========================================================== */
+   BADGES
+==========================================================*/
 
 .habitInfo{
+
+    margin-top:18px;
 
     display:flex;
 
@@ -807,17 +816,15 @@ button:active{
 
     gap:10px;
 
-    margin-top:18px;
-
 }
 
 .badge{
 
-    display:inline-flex;
+    display:flex;
 
     align-items:center;
 
-    gap:7px;
+    gap:8px;
 
     padding:8px 14px;
 
@@ -827,49 +834,49 @@ button:active{
 
     border:1px solid var(--border);
 
-    font-size:.85rem;
+    font-size:.82rem;
 
     font-weight:600;
 
 }
 
-/* ==========================================================
-   LAST COMPLETED
-========================================================== */
+.badge i{
 
-.lastCompleted{
-
-    margin-top:16px;
-
-    color:var(--textLight);
-
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    font-size:.9rem;
+    color:var(--primary);
 
 }
 
 /* ==========================================================
    NOTES
-========================================================== */
+==========================================================*/
+
+.lastCompleted{
+
+    margin-top:16px;
+
+    display:flex;
+
+    gap:8px;
+
+    align-items:center;
+
+    color:var(--textLight);
+
+}
 
 .habitNotes{
 
     margin-top:18px;
 
-    padding:16px;
-
-    border-radius:14px;
-
-    background:rgba(37,99,235,.06);
+    padding:18px;
 
     border-left:4px solid var(--primary);
 
-    line-height:1.5;
+    background:rgba(37,99,235,.06);
+
+    border-radius:14px;
+
+    line-height:1.6;
 
     display:flex;
 
@@ -878,44 +885,42 @@ button:active{
 }
 
 /* ==========================================================
-   BUTTONS
-========================================================== */
+   BUTTON GRID
+==========================================================*/
 
 .habitButtons{
 
     display:grid;
 
-    grid-template-columns:repeat(2,44px);
+    grid-template-columns:repeat(2,48px);
 
-    gap:10px;
+    gap:12px;
 
 }
 
 .habitButtons button{
 
-    width:44px;
+    width:48px;
 
-    height:44px;
+    height:48px;
 
     border:none;
 
-    border-radius:12px;
-
-    cursor:pointer;
-
-    font-size:16px;
-
-    transition:.2s;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
+    border-radius:14px;
 
     background:var(--background);
 
     color:var(--text);
+
+    cursor:pointer;
+
+    font-size:17px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
 
 }
 
@@ -926,12 +931,12 @@ button:active{
 }
 
 /* ==========================================================
-   INDIVIDUAL BUTTON COLORS
-========================================================== */
+   BUTTON COLORS
+==========================================================*/
 
 .favoriteButton:hover{
 
-    background:#FFD43B;
+    background:#FACC15;
 
     color:white;
 
@@ -987,45 +992,39 @@ button:active{
 
 /* ==========================================================
    EMPTY STATE
-========================================================== */
+==========================================================*/
 
 .empty{
 
     margin-top:60px;
 
-    text-align:center;
-
-    padding:60px 20px;
-
     background:var(--card);
-
-    border-radius:24px;
 
     border:2px dashed var(--border);
 
-}
+    border-radius:24px;
 
-.empty.hidden{
+    padding:70px 30px;
 
-    display:none;
+    text-align:center;
 
 }
 
 .empty i{
 
-    font-size:60px;
+    font-size:64px;
 
     color:var(--primary);
 
-    margin-bottom:20px;
+    margin-bottom:18px;
 
 }
 
 .empty h3{
 
-    font-size:1.5rem;
-
     margin-bottom:12px;
+
+    font-size:1.6rem;
 
 }
 
@@ -1037,195 +1036,47 @@ button:active{
 
     margin:auto;
 
-    line-height:1.6;
+    line-height:1.7;
 
 }
 
 /* ==========================================================
-   ANIMATIONS
-========================================================== */
-
-.fadeIn{
-
-    animation:fadeIn .25s ease;
-
-}
-
-@keyframes fadeIn{
-
-    from{
-
-        opacity:0;
-
-        transform:translateY(10px);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:translateY(0);
-
-    }
-
-}
-
-/* ==========================================================
-   FOOTER
-========================================================== */
-
-footer{
-
-    margin-top:50px;
-
-    padding:30px 20px;
-
-    text-align:center;
-
-    color:var(--textLight);
-
-    font-size:.95rem;
-
-}
-
-/* ==========================================================
-   LINKS
-========================================================== */
-
-a{
-
-    color:var(--primary);
-
-    text-decoration:none;
-
-    transition:.2s;
-
-}
-
-a:hover{
-
-    color:var(--primaryDark);
-
-}
-
-/* ==========================================================
-   FOCUS STATES
-========================================================== */
-
-button:focus,
-input:focus,
-select:focus{
-
-    outline:3px solid rgba(37,99,235,.25);
-
-    outline-offset:2px;
-
-}
-
-/* ==========================================================
-   SELECTION
-========================================================== */
-
-::selection{
-
-    background:var(--primary);
-
-    color:white;
-
-}
-
-/* ==========================================================
-   SCROLLBAR
-========================================================== */
-
-::-webkit-scrollbar{
-
-    width:10px;
-
-}
-
-::-webkit-scrollbar-track{
-
-    background:var(--background);
-
-}
-
-::-webkit-scrollbar-thumb{
-
-    background:var(--border);
-
-    border-radius:100px;
-
-}
-
-::-webkit-scrollbar-thumb:hover{
-
-    background:var(--primary);
-
-}
-
-/* ==========================================================
-   DARK MODE IMPROVEMENTS
-========================================================== */
-
-body.dark .hero{
-
-    background:linear-gradient(
-        135deg,
-        #1E40AF,
-        #2563EB
-    );
-
-}
-
-body.dark .badge{
-
-    background:#162032;
-
-}
-
-body.dark .habitNotes{
-
-    background:rgba(37,99,235,.12);
-
-}
-
-body.dark .searchContainer{
-
-    background:var(--card);
-
-}
-
-body.dark #habitInput{
-
-    background:var(--card);
-
-}
-
-body.dark #sortSelect{
-
-    background:var(--card);
-
-}
-
-body.dark .habitButtons button{
-
-    background:#162032;
-
-}
-
-body.dark .progress{
-
-    background:#24324a;
-
-}
-
-/* ==========================================================
-   LARGE TABLETS
-========================================================== */
+   MOBILE
+==========================================================*/
 
 @media (max-width:900px){
+
+    .controls{
+
+        flex-direction:column;
+
+    }
+
+    .searchContainer{
+
+        width:100%;
+
+    }
+
+    #sortSelect{
+
+        width:100%;
+
+    }
+
+    .inputRow{
+
+        flex-direction:column;
+
+    }
+
+    .addButton{
+
+        width:100%;
+
+        justify-content:center;
+
+    }
 
     .habitHeader{
 
@@ -1249,65 +1100,7 @@ body.dark .progress{
 
 }
 
-/* ==========================================================
-   MOBILE
-========================================================== */
-
 @media (max-width:600px){
-
-    .logo{
-
-        flex-direction:column;
-
-        align-items:center;
-
-        text-align:center;
-
-    }
-
-    .logoText{
-
-        text-align:center;
-
-    }
-
-    .hero{
-
-        padding:22px;
-
-        text-align:center;
-
-    }
-
-    .hero h2{
-
-        font-size:1.5rem;
-
-    }
-
-    .hero p{
-
-        font-size:.95rem;
-
-    }
-
-    .card{
-
-        padding:22px;
-
-    }
-
-    .card h3{
-
-        font-size:1.8rem;
-
-    }
-
-    .habit{
-
-        padding:18px;
-
-    }
 
     .habitTitleRow{
 
@@ -1317,105 +1110,850 @@ body.dark .progress{
 
     }
 
-    .habitInfo{
-
-        gap:8px;
-
-    }
-
-    .badge{
-
-        font-size:.78rem;
-
-        padding:7px 10px;
-
-    }
-
     .habitButtons{
 
         grid-template-columns:repeat(3,1fr);
 
     }
 
-    .habitButtons button{
+    .badge{
 
-        height:48px;
-
-    }
-
-    .empty{
-
-        padding:40px 15px;
+        font-size:.75rem;
 
     }
 
 }
 
 /* ==========================================================
-   SMALL PHONES
-========================================================== */
+   STATISTICS SECTION
+==========================================================*/
 
-@media (max-width:400px){
+.statistics{
 
-    .container{
+    margin-top:50px;
 
-        padding:12px;
+}
+
+.statistics h2{
+
+    margin-bottom:20px;
+
+}
+
+/* ==========================================================
+   WEEKLY CHART
+==========================================================*/
+
+.weeklyChart{
+
+    display:flex;
+
+    align-items:flex-end;
+
+    justify-content:space-between;
+
+    gap:14px;
+
+    height:240px;
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:24px;
+
+    padding:25px;
+
+    box-shadow:var(--shadow);
+
+    margin-bottom:40px;
+
+}
+
+.weekBar{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:flex-end;
+
+    gap:10px;
+
+    height:100%;
+
+}
+
+.weekBar .bar{
+
+    width:100%;
+
+    max-width:42px;
+
+    min-height:8px;
+
+    border-radius:12px 12px 0 0;
+
+    background:linear-gradient(
+        180deg,
+        var(--primary),
+        #5B8CFF
+    );
+
+    transition:height .45s;
+
+}
+
+.weekBar span{
+
+    font-size:.85rem;
+
+    color:var(--textLight);
+
+    font-weight:600;
+
+}
+
+/* ==========================================================
+   CATEGORY CHART
+==========================================================*/
+
+.categoryChart{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+}
+
+.categoryRow{
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:18px;
+
+    padding:18px 22px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    box-shadow:var(--shadow);
+
+}
+
+.categoryRow span{
+
+    font-weight:600;
+
+}
+
+.categoryRow strong{
+
+    color:var(--primary);
+
+    font-size:1.1rem;
+
+}
+
+/* ==========================================================
+   CALENDAR
+==========================================================*/
+
+.calendarSection{
+
+    margin-top:55px;
+
+}
+
+.calendar{
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:24px;
+
+    padding:24px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.calendarHeader{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+.calendarHeader h3{
+
+    font-size:1.4rem;
+
+    font-weight:700;
+
+}
+
+.calendarHeader button{
+
+    width:44px;
+
+    height:44px;
+
+    border:none;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    background:var(--background);
+
+    color:var(--text);
+
+    transition:.25s;
+
+}
+
+.calendarHeader button:hover{
+
+    background:var(--primary);
+
+    color:white;
+
+}
+
+.calendarWeekdays{
+
+    display:grid;
+
+    grid-template-columns:repeat(7,1fr);
+
+    margin-bottom:12px;
+
+    text-align:center;
+
+    font-weight:600;
+
+    color:var(--textLight);
+
+}
+
+.calendarGrid{
+
+    display:grid;
+
+    grid-template-columns:repeat(7,1fr);
+
+    gap:10px;
+
+}
+
+.calendarDay{
+
+    aspect-ratio:1;
+
+    border-radius:16px;
+
+    border:1px solid var(--border);
+
+    background:var(--background);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    font-weight:600;
+
+}
+
+.calendarDay:hover{
+
+    transform:translateY(-2px);
+
+    border-color:var(--primary);
+
+}
+
+.calendarDay.today{
+
+    border:2px solid var(--primary);
+
+}
+
+.calendarDay.completed{
+
+    background:var(--green);
+
+    color:white;
+
+}
+
+/* ==========================================================
+   DASHBOARD GRID
+==========================================================*/
+
+.dashboardGrid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(300px,1fr));
+
+    gap:24px;
+
+    margin-top:40px;
+
+}
+
+.dashboardCard{
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:24px;
+
+    padding:24px;
+
+    box-shadow:var(--shadow);
+
+}
+
+/* ==========================================================
+   CHART ANIMATION
+==========================================================*/
+
+@keyframes growBar{
+
+    from{
+
+        height:0;
 
     }
 
-    .hero h2{
+}
 
-        font-size:1.3rem;
+.weekBar .bar{
 
-    }
+    animation:growBar .6s ease;
 
-    .logoCircle{
+}
 
-        width:52px;
+/* ==========================================================
+   MOBILE
+==========================================================*/
 
-        height:52px;
+@media(max-width:900px){
 
-    }
+    .weeklyChart{
 
-    .themeButton{
-
-        height:48px;
-
-    }
-
-    .habitButtons{
+        height:190px;
 
         gap:8px;
 
     }
 
+    .calendarDay{
+
+        font-size:.85rem;
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    .calendar{
+
+        padding:15px;
+
+    }
+
+    .calendarGrid{
+
+        gap:5px;
+
+    }
+
+    .calendarDay{
+
+        border-radius:10px;
+
+        font-size:.8rem;
+
+    }
+
+    .weeklyChart{
+
+        padding:18px;
+
+    }
+
 }
 
 /* ==========================================================
-   TRANSITIONS
-========================================================== */
+   YEARLY HEATMAP
+==========================================================*/
 
-button,
-input,
-select,
-.card,
-.habit,
-.badge,
-.categoryBadge,
-.searchContainer{
+.heatmapSection{
+
+    margin-top:60px;
+
+}
+
+.heatmap{
+
+    margin-top:25px;
+
+    display:grid;
+
+    grid-template-columns:repeat(53,14px);
+
+    gap:5px;
+
+    justify-content:center;
+
+}
+
+.heatCell{
+
+    width:14px;
+
+    height:14px;
+
+    border-radius:4px;
+
+    background:var(--border);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    opacity:.35;
+
+}
+
+.heatCell.active{
+
+    background:var(--green);
+
+    opacity:1;
+
+}
+
+.heatCell:hover{
+
+    transform:scale(1.2);
+
+}
+
+.heatCell i{
+
+    color:white;
+
+    font-size:7px;
+
+}
+
+/* ==========================================================
+   ACHIEVEMENT POPUP
+==========================================================*/
+
+.achievementPopup{
+
+    position:fixed;
+
+    right:24px;
+
+    bottom:24px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    min-width:320px;
+
+    max-width:380px;
+
+    padding:18px;
+
+    border-radius:20px;
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.18);
+
+    transform:translateY(130px);
+
+    opacity:0;
 
     transition:
-        background .25s,
-        color .25s,
-        border-color .25s,
-        transform .25s,
-        box-shadow .25s;
+        transform .35s,
+        opacity .35s;
+
+    z-index:9999;
+
+}
+
+.achievementPopup.show{
+
+    transform:translateY(0);
+
+    opacity:1;
+
+}
+
+.achievementIcon{
+
+    width:58px;
+
+    height:58px;
+
+    border-radius:18px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:white;
+
+    font-size:24px;
+
+    flex-shrink:0;
+
+}
+
+.achievementContent{
+
+    flex:1;
+
+}
+
+.achievementContent h4{
+
+    margin-bottom:6px;
+
+    font-size:1rem;
+
+    font-weight:700;
+
+}
+
+.achievementContent p{
+
+    color:var(--textLight);
+
+    line-height:1.4;
+
+}
+
+/* ==========================================================
+   CALENDAR IMPROVEMENTS
+==========================================================*/
+
+.calendarDay.completed{
+
+    box-shadow:
+
+        inset 0 0 0 2px rgba(255,255,255,.15);
+
+}
+
+.calendarDay.completed:hover{
+
+    transform:translateY(-2px) scale(1.05);
+
+}
+
+.calendarDay.today{
+
+    box-shadow:
+
+        0 0 0 3px rgba(37,99,235,.25);
+
+}
+
+/* ==========================================================
+   CARD HOVER
+==========================================================*/
+
+.card:hover,
+.dashboardCard:hover,
+.habit:hover{
+
+    box-shadow:
+
+        0 18px 40px rgba(0,0,0,.12);
+
+}
+
+/* ==========================================================
+   INPUT FOCUS
+==========================================================*/
+
+input:focus,
+select:focus{
+
+    outline:none;
+
+    border-color:var(--primary);
+
+    box-shadow:
+
+        0 0 0 4px rgba(37,99,235,.12);
+
+}
+
+/* ==========================================================
+   BUTTON FOCUS
+==========================================================*/
+
+button:focus{
+
+    outline:none;
+
+    box-shadow:
+
+        0 0 0 4px rgba(37,99,235,.20);
+
+}
+
+/* ==========================================================
+   SELECTION
+==========================================================*/
+
+::selection{
+
+    background:var(--primary);
+
+    color:white;
+
+}
+
+/* ==========================================================
+   SCROLLBAR
+==========================================================*/
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+    height:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:var(--background);
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:var(--primary);
+
+    border-radius:999px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:var(--primaryDark);
+
+}
+
+/* ==========================================================
+   DARK MODE IMPROVEMENTS
+==========================================================*/
+
+body.dark .hero{
+
+    background:
+
+    linear-gradient(
+
+        135deg,
+
+        #1E40AF,
+
+        #2563EB
+
+    );
+
+}
+
+body.dark .badge{
+
+    background:#162032;
+
+}
+
+body.dark .categoryBadge{
+
+    background:#162032;
+
+}
+
+body.dark .calendarDay{
+
+    background:#162032;
+
+}
+
+body.dark .calendarDay.completed{
+
+    background:#22C55E;
+
+}
+
+body.dark .weekBar .bar{
+
+    background:
+
+        linear-gradient(
+
+            180deg,
+
+            #60A5FA,
+
+            #2563EB
+
+        );
+
+}
+
+body.dark .heatCell{
+
+    background:#2E3A52;
+
+}
+
+body.dark .heatCell.active{
+
+    background:#22C55E;
+
+}
+
+body.dark .achievementPopup{
+
+    background:#1D2433;
+
+}
+
+/* ==========================================================
+   FADE ANIMATION
+==========================================================*/
+
+.fadeIn{
+
+    animation:fadeIn .35s ease;
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(12px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* ==========================================================
+   MOBILE
+==========================================================*/
+
+@media(max-width:700px){
+
+    .achievementPopup{
+
+        left:15px;
+
+        right:15px;
+
+        bottom:15px;
+
+        min-width:auto;
+
+        max-width:none;
+
+    }
+
+    .heatmap{
+
+        grid-template-columns:repeat(26,14px);
+
+    }
+
+}
+
+@media(max-width:500px){
+
+    .achievementPopup{
+
+        flex-direction:column;
+
+        text-align:center;
+
+    }
+
+    .achievementIcon{
+
+        margin-bottom:10px;
+
+    }
 
 }
 
 /* ==========================================================
    UTILITIES
-========================================================== */
+==========================================================*/
 
 .hidden{
 
@@ -1423,15 +1961,15 @@ select,
 
 }
 
-.textCenter{
-
-    text-align:center;
-
-}
-
 .fullWidth{
 
     width:100%;
+
+}
+
+.textCenter{
+
+    text-align:center;
 
 }
 
@@ -1446,7 +1984,3 @@ select,
     margin-bottom:20px;
 
 }
-
-/* ==========================================================
-   END
-========================================================== */

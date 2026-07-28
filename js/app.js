@@ -1779,6 +1779,872 @@ function updateDashboard(){
 
 }
 
+let calendarDate = new Date();
+
+/* ==========================================================
+   CALENDAR HELPERS
+========================================================== */
+
+function formatDateKey(year, month, day){
+
+    return [
+
+        year,
+
+        String(month + 1).padStart(2,"0"),
+
+        String(day).padStart(2,"0")
+
+    ].join("-");
+
+}
+
+function completedOnDate(dateKey){
+
+    return habits.filter(
+
+        habit => habit.history[dateKey]
+
+    );
+
+}
+
+/* ==========================================================
+   CALENDAR
+========================================================== */
+
+function renderCalendar(){
+
+    const container = document.getElementById("calendar");
+
+    if(!container){
+
+        return;
+
+    }
+
+    container.innerHTML = "";
+
+    const year = calendarDate.getFullYear();
+
+    const month = calendarDate.getMonth();
+
+    const firstDay = new Date(year, month, 1);
+
+    const lastDay = new Date(year, month + 1, 0);
+
+    const startWeekday = firstDay.getDay();
+
+    const totalDays = lastDay.getDate();
+
+    /* ======================
+       HEADER
+    ====================== */
+
+    const header = document.createElement("div");
+
+    header.className = "calendarHeader";
+
+    header.innerHTML = `
+
+        <button id="calendarPrev">
+
+            <i class="fa-solid fa-chevron-left"></i>
+
+        </button>
+
+        <h3>
+
+            ${calendarDate.toLocaleString("default",{
+                month:"long",
+                year:"numeric"
+            })}
+
+        </h3>
+
+        <button id="calendarNext">
+
+            <i class="fa-solid fa-chevron-right"></i>
+
+        </button>
+
+    `;
+
+    container.appendChild(header);
+
+    /* ======================
+       WEEKDAYS
+    ====================== */
+
+    const weekdays = document.createElement("div");
+
+    weekdays.className = "calendarWeekdays";
+
+    ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
+
+    .forEach(day=>{
+
+        const div = document.createElement("div");
+
+        div.textContent = day;
+
+        weekdays.appendChild(div);
+
+    });
+
+    container.appendChild(weekdays);
+
+    /* ======================
+       GRID
+    ====================== */
+
+    const grid = document.createElement("div");
+
+    grid.className = "calendarGrid";
+
+    for(let i=0;i<startWeekday;i++){
+
+        grid.appendChild(
+
+            document.createElement("div")
+
+        );
+
+    }
+
+    const today = todayKey();
+
+    for(let day=1;day<=totalDays;day++){
+
+        const key = formatDateKey(
+
+            year,
+
+            month,
+
+            day
+
+        );
+
+        const completed = completedOnDate(key);
+
+        const cell = document.createElement("div");
+
+        cell.className = "calendarDay";
+
+        if(key===today){
+
+            cell.classList.add("today");
+
+        }
+
+        if(completed.length>0){
+
+            cell.classList.add("completed");
+
+        }
+
+        cell.innerHTML = `
+
+            <span>${day}</span>
+
+        `;
+
+        cell.onclick=()=>{
+
+            showDaySummary(
+
+                key,
+
+                completed
+
+            );
+
+        };
+
+        grid.appendChild(cell);
+
+    }
+
+    container.appendChild(grid);
+
+    /* ======================
+       BUTTONS
+    ====================== */
+
+    document.getElementById(
+
+        "calendarPrev"
+
+    ).onclick=()=>{
+
+        calendarDate.setMonth(
+
+            calendarDate.getMonth()-1
+
+        );
+
+        renderCalendar();
+
+    };
+
+    document.getElementById(
+
+        "calendarNext"
+
+    ).onclick=()=>{
+
+        calendarDate.setMonth(
+
+            calendarDate.getMonth()+1
+
+        );
+
+        renderCalendar();
+
+    };
+
+}
+
+/* ==========================================================
+   DAY SUMMARY
+========================================================== */
+
+function showDaySummary(dateKey,list){
+
+    if(list.length===0){
+
+        alert(
+
+            `${dateKey}\n\nNo habits completed.`
+
+        );
+
+        return;
+
+    }
+
+    const names = list
+
+        .map(h=>`• ${h.name}`)
+
+        .join("\n");
+
+    alert(
+
+`${dateKey}
+
+Completed ${list.length} habit${
+
+list.length===1?"":"s"
+
+}
+
+-------------------------
+
+${names}`
+
+    );
+
+}
+
+/* ==========================================================
+   WEEKLY DATA
+========================================================== */
+
+function getWeeklyData(){
+
+    const data = [];
+
+    for(let i=6;i>=0;i--){
+
+        const date = new Date();
+
+        date.setDate(date.getDate()-i);
+
+        const key = todayKeyFromDate(date);
+
+        let completed = 0;
+
+        habits.forEach(habit=>{
+
+            if(habit.history[key]){
+
+                completed++;
+
+            }
+
+        });
+
+        data.push({
+
+            label:date.toLocaleDateString("en-US",{
+
+                weekday:"short"
+
+            }),
+
+            completed:completed
+
+        });
+
+    }
+
+    return data;
+
+}
+
+function todayKeyFromDate(date){
+
+    return [
+
+        date.getFullYear(),
+
+        String(date.getMonth()+1).padStart(2,"0"),
+
+        String(date.getDate()).padStart(2,"0")
+
+    ].join("-");
+
+}
+
+/* ==========================================================
+   CATEGORY STATS
+========================================================== */
+
+function categoryStats(){
+
+    const stats = {};
+
+    habits.forEach(habit=>{
+
+        if(!stats[habit.category]){
+
+            stats[habit.category]=0;
+
+        }
+
+        stats[habit.category]++;
+
+    });
+
+    return stats;
+
+}
+
+/* ==========================================================
+   UPDATE DASHBOARD
+========================================================== */
+
+function updateDashboard(){
+
+    const overallRate = document.getElementById("overallRate");
+    const overallLongest = document.getElementById("overallLongest");
+    const overallCurrent = document.getElementById("overallCurrent");
+    const topHabit = document.getElementById("topHabit");
+
+    if(overallRate){
+
+        overallRate.textContent =
+
+            overallCompletionRate()+"%";
+
+    }
+
+    if(overallLongest){
+
+        overallLongest.textContent =
+
+            longestOverallStreak();
+
+    }
+
+    if(overallCurrent){
+
+        overallCurrent.textContent =
+
+            currentOverallStreak();
+
+    }
+
+    if(topHabit){
+
+        const winner = mostCompletedHabit();
+
+        topHabit.textContent =
+
+            winner
+
+            ?
+
+            winner.name
+
+            :
+
+            "None";
+
+    }
+
+    renderWeeklyChart();
+
+    renderCategoryChart();
+
+}
+
+/* ==========================================================
+   WEEKLY CHART
+========================================================== */
+
+function renderWeeklyChart(){
+
+    const chart = document.getElementById("weeklyChart");
+
+    if(!chart){
+
+        return;
+
+    }
+
+    chart.innerHTML="";
+
+    const data = getWeeklyData();
+
+    const max = Math.max(
+
+        habits.length,
+
+        1
+
+    );
+
+    data.forEach(day=>{
+
+        const bar = document.createElement("div");
+
+        bar.className="weekBar";
+
+        const height =
+
+            (day.completed/max)*100;
+
+        bar.innerHTML = `
+
+            <div
+                class="bar"
+                style="height:${height}%">
+            </div>
+
+            <span>
+
+                ${day.label}
+
+            </span>
+
+        `;
+
+        chart.appendChild(bar);
+
+    });
+
+}
+
+/* ==========================================================
+   CATEGORY CHART
+========================================================== */
+
+function renderCategoryChart(){
+
+    const chart = document.getElementById(
+
+        "categoryChart"
+
+    );
+
+    if(!chart){
+
+        return;
+
+    }
+
+    chart.innerHTML="";
+
+    const stats = categoryStats();
+
+    Object.keys(stats).forEach(category=>{
+
+        const row = document.createElement("div");
+
+        row.className="categoryRow";
+
+        row.innerHTML = `
+
+            <span>
+
+                ${category}
+
+            </span>
+
+            <strong>
+
+                ${stats[category]}
+
+            </strong>
+
+        `;
+
+        chart.appendChild(row);
+
+    });
+
+}
+
+/* ==========================================================
+   REFRESH EVERYTHING
+========================================================== */
+
+const originalRender = renderHabits;
+
+renderHabits = function(){
+
+    originalRender();
+
+    updateDashboard();
+
+    renderCalendar();
+
+};
+
+/* ==========================================================
+   ACHIEVEMENTS
+========================================================== */
+
+const achievements = [
+
+    {
+        id:"firstHabit",
+        icon:"fa-seedling",
+        color:"#22C55E",
+        title:"First Habit Created",
+        check:()=>habits.length>=1
+    },
+
+    {
+        id:"fiveHabits",
+        icon:"fa-list-check",
+        color:"#2563EB",
+        title:"Five Habits Added",
+        check:()=>habits.length>=5
+    },
+
+    {
+        id:"weekStreak",
+        icon:"fa-fire",
+        color:"#F97316",
+        title:"7 Day Streak",
+        check:()=>longestOverallStreak()>=7
+    },
+
+    {
+        id:"monthStreak",
+        icon:"fa-trophy",
+        color:"#FACC15",
+        title:"30 Day Streak",
+        check:()=>longestOverallStreak()>=30
+    },
+
+    {
+        id:"hundred",
+        icon:"fa-star",
+        color:"#8B5CF6",
+        title:"100 Total Completions",
+        check:()=>{
+
+            let total=0;
+
+            habits.forEach(h=>{
+
+                total+=h.totalCompletions;
+
+            });
+
+            return total>=100;
+
+        }
+
+    }
+
+];
+
+/* ==========================================================
+   STORAGE
+========================================================== */
+
+function unlockedAchievements(){
+
+    return JSON.parse(
+
+        localStorage.getItem(
+
+            "habitAchievements"
+
+        ) || "[]"
+
+    );
+
+}
+
+function saveAchievements(list){
+
+    localStorage.setItem(
+
+        "habitAchievements",
+
+        JSON.stringify(list)
+
+    );
+
+}
+
+/* ==========================================================
+   CHECK
+========================================================== */
+
+function checkAchievements(){
+
+    const unlocked=unlockedAchievements();
+
+    achievements.forEach(a=>{
+
+        if(
+
+            !unlocked.includes(a.id)
+
+            &&
+
+            a.check()
+
+        ){
+
+            unlocked.push(a.id);
+
+            showAchievement(a);
+
+        }
+
+    });
+
+    saveAchievements(unlocked);
+
+}
+
+/* ==========================================================
+   POPUP
+========================================================== */
+
+function showAchievement(achievement){
+
+    const popup=document.createElement("div");
+
+    popup.className="achievementPopup";
+
+    popup.innerHTML=`
+
+        <div class="achievementIcon"
+
+             style="background:${achievement.color};">
+
+            <i class="fa-solid ${achievement.icon}"></i>
+
+        </div>
+
+        <div class="achievementContent">
+
+            <h4>
+
+                Achievement Unlocked
+
+            </h4>
+
+            <p>
+
+                ${achievement.title}
+
+            </p>
+
+        </div>
+
+    `;
+
+    document.body.appendChild(popup);
+
+    requestAnimationFrame(()=>{
+
+        popup.classList.add("show");
+
+    });
+
+    setTimeout(()=>{
+
+        popup.classList.remove("show");
+
+        setTimeout(()=>{
+
+            popup.remove();
+
+        },400);
+
+    },3500);
+
+}
+
+/* ==========================================================
+   DAILY CELEBRATION
+========================================================== */
+
+function dailyReminder(){
+
+    if(habits.length===0){
+
+        return;
+
+    }
+
+    if(
+
+        completedTodayCount()===habits.length
+
+    ){
+
+        showAchievement({
+
+            icon:"fa-circle-check",
+
+            color:"#22C55E",
+
+            title:"Every habit completed today!"
+
+        });
+
+    }
+
+}
+
+/* ==========================================================
+   YEAR HEATMAP
+========================================================== */
+
+function renderHeatmap(){
+
+    const heatmap=document.getElementById("heatmap");
+
+    if(!heatmap){
+
+        return;
+
+    }
+
+    heatmap.innerHTML="";
+
+    for(let i=364;i>=0;i--){
+
+        const date=new Date();
+
+        date.setDate(
+
+            date.getDate()-i
+
+        );
+
+        const key=todayKeyFromDate(date);
+
+        let completed=0;
+
+        habits.forEach(h=>{
+
+            if(h.history[key]){
+
+                completed++;
+
+            }
+
+        });
+
+        const cell=document.createElement("div");
+
+        cell.className="heatCell";
+
+        if(completed>0){
+
+            cell.classList.add("active");
+
+            cell.style.opacity=Math.min(
+
+                .25+
+
+                completed/
+
+                Math.max(habits.length,1),
+
+                1
+
+            );
+
+        }
+
+        cell.innerHTML=
+
+            completed
+
+            ?
+
+            '<i class="fa-solid fa-check"></i>'
+
+            :
+
+            "";
+
+        cell.title=
+
+            `${key}\n${completed} completed`;
+
+        heatmap.appendChild(cell);
+
+    }
+
+}
+
+/* ==========================================================
+   ANIMATED DASHBOARD
+========================================================== */
+
+function refreshDashboard(){
+
+    updateDashboard();
+
+    renderCalendar();
+
+    renderHeatmap();
+
+    checkAchievements();
+
+    dailyReminder();
+
+}
+
+/* ==========================================================
+   WRAP RENDER
+========================================================== */
+
+const previousRenderHabits=renderHabits;
+
+renderHabits=function(){
+
+    previousRenderHabits();
+
+    refreshDashboard();
+
+};
+
 /* ==========================================================
    START APP
 ========================================================== */

@@ -5,38 +5,34 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Habit Tracker</title>
 
-    <link
-        rel="stylesheet"
-        href="css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
 <div class="container">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
 
     <header>
 
@@ -54,7 +50,7 @@
 
                     <h1>Habit Tracker</h1>
 
-                    <p>Build Better Habits Every Day</p>
+                    <p>Build better habits every day.</p>
 
                 </div>
 
@@ -72,72 +68,108 @@
 
     </header>
 
+    <!-- =========================
+         HERO
+    ========================== -->
+
     <section class="hero">
 
         <h2>
 
-            Small habits create big results.
+            Small habits lead to big changes.
 
         </h2>
 
         <p>
 
             Track your daily habits, build streaks,
-            and stay consistent.
+            stay consistent, and visualize your progress.
 
         </p>
 
     </section>
 
+    <!-- =========================
+         DASHBOARD
+    ========================== -->
+
     <section class="summary">
 
         <div class="card">
 
-            <h3 id="habitTotal">
+            <h3 id="habitTotal">0</h3>
 
-                0
-
-            </h3>
-
-            <span>
-
-                Total Habits
-
-            </span>
+            <span>Total Habits</span>
 
         </div>
 
         <div class="card">
 
-            <h3 id="completedToday">
+            <h3 id="completedToday">0%</h3>
 
-                0%
+            <span>Completed Today</span>
+
+        </div>
+
+        <div class="card">
+
+            <h3 id="overallRate">0%</h3>
+
+            <span>Completion Rate</span>
+
+        </div>
+
+        <div class="card">
+
+            <h3 id="overallLongest">0</h3>
+
+            <span>Longest Streak</span>
+
+        </div>
+
+        <div class="card">
+
+            <h3 id="overallCurrent">0</h3>
+
+            <span>Current Best Streak</span>
+
+        </div>
+
+        <div class="card">
+
+            <h3 id="topHabit">
+
+                None
 
             </h3>
 
-            <span>
-
-                Completed Today
-
-            </span>
+            <span>Top Habit</span>
 
         </div>
 
     </section>
+
+    <!-- =========================
+         PROGRESS BAR
+    ========================== -->
 
     <section class="progressSection">
 
         <div class="progress">
 
             <div
-                class="progressBar"
-                id="progressBar">
+                id="progressBar"
+                class="progressBar">
 
             </div>
 
         </div>
 
     </section>
+
+    <!-- =========================
+         SEARCH / SORT
+    ========================== -->
 
     <section class="controls">
 
@@ -197,6 +229,10 @@
 
     </section>
 
+    <!-- =========================
+         ADD HABIT
+    ========================== -->
+
     <section class="addHabit">
 
         <div class="inputRow">
@@ -219,13 +255,17 @@
 
                 <i class="fa-solid fa-plus"></i>
 
-                Add
+                Add Habit
 
             </button>
 
         </div>
 
     </section>
+
+    <!-- =========================
+         HABIT LIST HEADER
+    ========================== -->
 
     <section class="habitHeaderRow">
 
@@ -243,6 +283,10 @@
 
     </section>
 
+    <!-- =========================
+         HABITS
+    ========================== -->
+
     <main
 
         id="habitList"
@@ -251,11 +295,15 @@
 
     </main>
 
+    <!-- =========================
+         EMPTY STATE
+    ========================== -->
+
     <section
 
         id="emptyState"
 
-        class="empty">
+        class="empty hidden">
 
         <i class="fa-regular fa-face-smile"></i>
 
@@ -267,15 +315,42 @@
 
         <p>
 
-            Create your first habit above to begin building your routine.
+            Add your first habit above to start building
+            a consistent daily routine.
 
         </p>
 
     </section>
 
+    <!-- =========================
+         CALENDAR (Day 6)
+    ========================== -->
+
+    <section
+        id="calendarSection"
+        class="calendarSection">
+
+        <h2>
+
+            Monthly Calendar
+
+        </h2>
+
+        <div id="calendar">
+
+            <!-- Generated by JavaScript -->
+
+        </div>
+
+    </section>
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
     <footer>
 
-        Habit Tracker • Day 5 Development Build
+        Habit Tracker Day 6 • Development Build
 
     </footer>
 
